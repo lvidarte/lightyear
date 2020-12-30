@@ -2,7 +2,10 @@
 
 Runs multiple parallel processes (fork) using queues as communication method.
 
-## Common
+Check the current [Akeneo Pipeline](https://gitlab.com/chalhoub-data/lightyear/-/tree/master/lightyear/clients/akeneo)
+as an example.
+
+### Command Line Interface
 
 ```sh
 $ python main.py --help
@@ -19,11 +22,13 @@ optional arguments:
                         error,warning,info,debug
 ```
 
-## Requirements
+## Development
+
+### Requirements
 
 - Python 3.8.5
 
-## Python environment creation
+### Python environment creation
 
 ```sh
 python -m venv env
@@ -32,25 +37,25 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-## Python environment activation
+### Python environment activation
 
 ```sh
 source env/bin/activate
 ```
 
-## Google Cloud credentials
+### Google Cloud credentials
 
 ```sh
 export GCP_KEY_PATH={path-to-your-json-credentials-file}
 ```
 
-## Docker run (currently runs a fixed command)
+### Docker run (currently runs a fixed command)
 
 ```sh
 docker-compose up [--build]
 ```
 
-## Check forked proceses in Docker container
+### Check forked proceses in Docker container
 
 ```sh
 docker exec lightyear /bin/bash -c 'ps fax'

@@ -2,12 +2,11 @@
 
 ![Akeneo Pipeline](./akeneo_pipeline.png "Akeneo Pipeline")
 
-## BigQuery table
+### BigQuery table
 
 - `chb-prod-ingest-ecom.lightyear.akeneo`
 
-
-## Command line options for Akeneo
+### Command line options for Akeneo
 
 ```sh
 $ python main.py akeneo --help
@@ -19,7 +18,7 @@ optional arguments:
                         The Akeneo account
 ```
 
-## Log example
+### Log example
 
 ```sh
 $ docker-compose up
