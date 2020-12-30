@@ -55,3 +55,19 @@ lightyear    | [ INFO ] bigquery-8 (pid 24) - Process finished (17373 docs proce
 lightyear    | [ INFO ] main-0 (pid 1) - All bigquery processes have finished
 lightyear exited with code 0
 ```
+
+### Parallel running processes
+
+```sh
+$ docker exec lightyear /bin/bash -c 'ps fax'
+  PID TTY      STAT   TIME COMMAND
+    1 ?        Ss     0:00 python main.py akeneo --account=faces
+    8 ?        S      0:00 python main.py akeneo --account=faces
+   12 ?        Sl     0:00 python main.py akeneo --account=faces
+   16 ?        Sl     0:00 python main.py akeneo --account=faces
+   17 ?        Sl     0:00 python main.py akeneo --account=faces
+   18 ?        Sl     0:00 python main.py akeneo --account=faces
+   19 ?        Sl     0:00 python main.py akeneo --account=faces
+   23 ?        S      0:00 python main.py akeneo --account=faces
+   24 ?        S      0:00 python main.py akeneo --account=faces
+```

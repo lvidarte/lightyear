@@ -58,5 +58,5 @@ docker-compose up [--build]
 ### Check forked proceses in Docker container
 
 ```sh
-docker exec lightyear /bin/bash -c 'ps fax'
+ docker exec lightyear /bin/bash -c 'ps fax'
 ```
