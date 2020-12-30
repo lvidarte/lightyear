@@ -28,8 +28,8 @@ optional arguments:
 ```sh
 python -m venv env
 source env/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
 ## Python environment activation
@@ -37,6 +37,8 @@ pip install -r requirements.txt
 ```sh
 source env/bin/activate
 ```
+
+## Google Cloud credentials
 
 ```sh
 export GCP_KEY_PATH={path-to-your-json-credentials-file}

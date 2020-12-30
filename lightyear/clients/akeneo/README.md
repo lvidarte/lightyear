@@ -2,6 +2,10 @@
 
 ![Akeneo Pipeline](./akeneo_pipeline.png "Akeneo Pipeline")
 
+## BigQuery table
+
+- `chb-prod-ingest-ecom.lightyear.akeneo`
+
 
 ## Command line options for Akeneo
 
