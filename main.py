@@ -19,7 +19,7 @@ if __name__ == '__main__':
         '--log-level',
         help='error,warning,info,debug',
         choices=['error','warning','info','debug'],
-        default='debug',
+        default='info',
     )
 
     client_parsers = {}

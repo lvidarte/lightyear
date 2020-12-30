@@ -18,6 +18,9 @@ class Config:
             'akeneo': akeneo_config,
         }
 
+        self.date_format = '%Y-%m-%d'
+        self.time_format = '%Y-%m-%d %H:%M:%S.%f'
+
         self.slack = {
             'url': 'https://hooks.slack.com/services/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',
         }

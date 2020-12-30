@@ -6,6 +6,12 @@ class Config:
 
     def __init__(self):
 
+        self.gcp = {
+            'project_id': 'chb-prod-ingest-ecom',
+            'dataset_id': 'lightyear',
+            'table_id': 'akeneo',
+        }
+
         self.api = {
             'url': 'https://chalhoub.cloud.akeneo.com',
             'key': 'NF8zdnJxdHdqMnpsYzBvbzhnb2s0d2NjY2NzOG9rc284YzAwd29rbzR3MG9jZ2t3d3c4NDoydnNmcWhvcnhhbThrY3cwa2s0d3M0czBzNGc0NDhzNDhjb2M4b2tvdzhrNDRnZ2M0cw==',

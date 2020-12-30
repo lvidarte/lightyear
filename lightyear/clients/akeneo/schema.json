@@ -1,0 +1,44 @@
+[
+      {
+        "mode": "REQUIRED",
+        "name": "id",
+        "type": "STRING"
+      },
+      {
+        "mode": "REQUIRED",
+        "name": "account",
+        "type": "STRING"
+      },
+      {
+        "mode": "REQUIRED",
+        "name": "enabled",
+        "type": "BOOLEAN"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "family",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "created",
+        "type": "TIMESTAMP"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "updated",
+        "type": "TIMESTAMP"
+      },
+      {
+        "mode": "REQUIRED",
+        "name": "metadata",
+        "type": "RECORD",
+        "fields": [
+          {
+            "mode": "REQUIRED",
+            "name": "ingestion_time",
+            "type": "TIMESTAMP"
+          }
+        ]
+      }
+]
