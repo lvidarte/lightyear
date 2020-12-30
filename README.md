@@ -46,7 +46,7 @@ source env/bin/activate
 ### Google Cloud credentials
 
 ```sh
-export GCP_KEY_PATH={path-to-your-json-credentials-file}
+export GOOGLE_APPLICATION_CREDENTIALS={path-to-your-json-credentials-file}
 ```
 
 ### Docker run (currently runs a fixed command)
