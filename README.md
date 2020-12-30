@@ -2,7 +2,7 @@
 
 Runs multiple parallel processes (fork) using queues as communication method.
 
-#### Pipelines
+### Pipelines
 
 - [Akeneo Pipeline](https://gitlab.com/chalhoub-data/lightyear/-/tree/master/lightyear/clients/akeneo)
 - [RetailNext Pipeline](https://gitlab.com/chalhoub-data/lightyear/-/tree/master/lightyear/clients/retailnext)
