@@ -2,6 +2,7 @@
 """
 
 from lightyear.clients.akeneo import config as akeneo_config
+from lightyear.clients.retailnext import config as retailnext_config
 
 
 class Config:
@@ -16,6 +17,7 @@ class Config:
 
         self.clients = {
             'akeneo': akeneo_config,
+            'retailnext': retailnext_config,
         }
 
         self.date_format = '%Y-%m-%d'

@@ -9,12 +9,12 @@ as an example.
 
 ```sh
 $ python main.py --help
-usage: lightyear [-h] [-l {error,warning,info,debug}] {akeneo} ...
+usage: lightyear [-h] [-l {error,warning,info,debug}] {akeneo,retailnext} ...
 
 Pipeline runner
 
 positional arguments:
-  {akeneo}
+  {akeneo,retailnext}
 
 optional arguments:
   -h, --help            show this help message and exit
