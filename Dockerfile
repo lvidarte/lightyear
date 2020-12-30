@@ -18,6 +18,5 @@ COPY . ./
 # Production dependencies.
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# For environments with multiple CPU cores, increase the number of workers
-# to be equal to the cores available.
-CMD exec python main.py --client=${LIGHTYEAR_CLIENT}
+# Currently, run a fixed command
+CMD exec python main.py ${LIGHTYEAR_CLIENT} --account=${LIGHTYEAR_ACCOUNT}

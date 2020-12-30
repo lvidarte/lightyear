@@ -5,10 +5,9 @@ services:
    build: .
    image: lightyear:latest
    container_name: lightyear
-   #ports:
-   #  - "8080:${PORT:-8080}"
    environment:
      LIGHTYEAR_CLIENT: akeneo
-   #  GOOGLE_APPLICATION_CREDENTIALS: /root/keys/keyfile.json
-   #volumes:
-   #  - ${GCP_KEY_PATH}:/root/keys/keyfile.json:ro
+     LIGHTYEAR_ACCOUNT: faces
+     GOOGLE_APPLICATION_CREDENTIALS: /root/keys/keyfile.json
+   volumes:
+     - ${GOOGLE_APPLICATION_CREDENTIALS}:/root/keys/keyfile.json:ro
