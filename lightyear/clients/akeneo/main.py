@@ -6,7 +6,6 @@ import requests
 from urllib.parse import urlsplit, parse_qs
 from datetime import datetime
 
-from lightyear.core.logger import get_logger
 from lightyear.core.bigquery import BigQuery
 from lightyear.core import config as common_config
 from lightyear.core import Pipeline
@@ -24,7 +23,7 @@ class Akeneo(Pipeline):
     def monitor_proc(self, queue_1, queue_2):
         """Monitor process"""
         import time
-        logger = get_logger(self.process_id('monitor_proc'))
+        logger = self.get_logger('monitor_proc')
         while True:
             try:
                 queue_1_size = queue_1.qsize()
@@ -39,7 +38,7 @@ class Akeneo(Pipeline):
 
     def api_client_proc(self, queue_1):
         """Akeneo API client process"""
-        logger = get_logger(self.process_id('api_client_proc'))
+        logger = self.get_logger('api_client_proc')
         logger.info(f"Process started")
         token = self._auth()
         params = None
@@ -59,7 +58,7 @@ class Akeneo(Pipeline):
 
     def doc_validator_proc(self, queue_1, queue_2):
         """BigQuery doc validator"""
-        logger = get_logger(self.process_id('doc_validator_proc'))
+        logger = self.get_logger('doc_validator_proc')
         logger.info(f"Process started")
         count = 0
         while True:
@@ -76,7 +75,7 @@ class Akeneo(Pipeline):
 
     def bigquery_proc(self, queue_2):
         """BigQuery insert process"""
-        logger = get_logger(self.process_id('bigquery_proc'))
+        logger = self.get_logger('bigquery_proc')
         logger.info(f"Process started")
         count = 0
         docs = []

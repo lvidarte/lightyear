@@ -6,7 +6,6 @@ import requests
 
 from datetime import datetime, timedelta
 
-from lightyear.core.logger import get_logger
 from lightyear.core.bigquery import BigQuery
 from lightyear.core import config as common_config
 from lightyear.core import Pipeline
@@ -22,7 +21,7 @@ class RetailNext(Pipeline):
     def monitor_proc(self, queue_1, queue_2):
         """Monitor process"""
         import time
-        logger = get_logger(self.process_id('monitor_proc'))
+        logger = self.get_logger('monitor_proc')
         while True:
             try:
                 queue_1_size = queue_1.qsize()
@@ -37,7 +36,7 @@ class RetailNext(Pipeline):
 
     def api_client_location_proc(self, queue_1):
         """RetailNext API client location process"""
-        logger = get_logger(self.process_id('api_client_location_proc'))
+        logger = self.get_logger('api_client_location_proc')
         logger.info(f"Process started")
         session = self._session()
         location_url = self.config.api['url'] + '/location'
@@ -59,7 +58,7 @@ class RetailNext(Pipeline):
 
     def api_client_datamine_proc(self, queue_1, queue_2):
         """RetailNext API client datamine process"""
-        logger = get_logger(self.process_id('api_client_datamine_proc'))
+        logger = self.get_logger('api_client_datamine_proc')
         logger.info(f"Process started")
         session = self._session()
         datamine_url = self.config.api['url'] + '/datamine'
@@ -89,7 +88,7 @@ class RetailNext(Pipeline):
 
     def bigquery_proc(self, queue_2):
         """BigQuery insert process"""
-        logger = get_logger(self.process_id('bigquery_proc'))
+        logger = self.get_logger('bigquery_proc')
         logger.info(f"Process started")
         count = 0
         docs = []
@@ -136,5 +135,8 @@ class RetailNext(Pipeline):
 
     def _session(self):
         session = requests.Session()
-        session.auth = (self.config.api['access_key'], self.config.api['secret_key'])
+        session.auth = (
+            self.config.api['access_key'],
+            self.config.api['secret_key'],
+        )
         return session
