@@ -6,8 +6,6 @@ services:
    image: lightyear:latest
    container_name: lightyear
    environment:
-     LIGHTYEAR_CLIENT: akeneo
-     LIGHTYEAR_ACCOUNT: faces
      GOOGLE_APPLICATION_CREDENTIALS: /root/keys/keyfile.json
    volumes:
      - ${GOOGLE_APPLICATION_CREDENTIALS}:/root/keys/keyfile.json:ro

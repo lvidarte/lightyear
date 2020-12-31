@@ -19,5 +19,5 @@ COPY . ./
 # Production dependencies.
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Currently, run a fixed command.
-CMD exec python main.py ${LIGHTYEAR_CLIENT} --account=${LIGHTYEAR_ACCOUNT}
+# Show cli help.
+CMD exec python main.py --help

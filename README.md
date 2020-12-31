@@ -51,14 +51,15 @@ source env/bin/activate
 export GOOGLE_APPLICATION_CREDENTIALS={path-to-your-json-credentials-file}
 ```
 
-### Docker run (currently runs a fixed command)
+### Docker run
 
 ```sh
-docker-compose up [--build]
+docker-compose build
+docker-compose run lightyear
 ```
 
 ### Check forked proceses in Docker container
 
 ```sh
- docker exec lightyear /bin/bash -c 'ps fax'
+ docker exec <container-id> /bin/bash -c 'ps fax'
 ```
