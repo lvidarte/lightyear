@@ -95,14 +95,14 @@ class RetailNext(Pipeline):
         while True:
             doc = queue_2.get()
             if doc == 'DONE':
-                if docs:
-                    self.bigquery.insert(docs)
+                #if docs:
+                #    self.bigquery.insert(docs)
                 break
             else:
                 docs.append(doc)
                 count += 1
                 if count % 100 == 0:
-                    self.bigquery.insert(docs)
+                    #self.bigquery.insert(docs)
                     logger.info(f"{count} docs sent to bigquery")
                     docs = []
         logger.info(f"Process finished ({count} docs processed)")

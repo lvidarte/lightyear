@@ -18,56 +18,59 @@ optional arguments:
                         the akeneo account
 ```
 
-### Log example
+### Docker Composer run
 
 ```sh
-$ docker-compose up
-Starting lightyear ... done
-Attaching to lightyear
-lightyear    | [ INFO ] main-0 (pid 1) - Starting 1 monitor process
-lightyear    | [ INFO ] main-0 (pid 1) - Starting 1 api_client process
-lightyear    | [ INFO ] main-0 (pid 1) - Starting 4 validator process
-lightyear    | [ INFO ] api-client-2 (pid 12) - Process started
-lightyear    | [ INFO ] validator-3 (pid 16) - Process started
-lightyear    | [ INFO ] validator-5 (pid 18) - Process started
-lightyear    | [ INFO ] validator-6 (pid 19) - Process started
-lightyear    | [ INFO ] main-0 (pid 1) - Starting 2 bigquery process
-lightyear    | [ INFO ] validator-4 (pid 17) - Process started
-lightyear    | [ INFO ] bigquery-8 (pid 24) - Process started
-lightyear    | [ INFO ] bigquery-7 (pid 23) - Process started
-lightyear    | [ INFO ] api-client-2 (pid 12) - 100 docs sent to queue_1
-lightyear    | [ INFO ] monitor-1 (pid 8) - Queue sizes: queue_1=9, queue_2=1
-lightyear    | [ INFO ] api-client-2 (pid 12) - 200 docs sent to queue_1
-lightyear    | [ INFO ] bigquery-7 (pid 23) - 100 docs sent to bigquery
-lightyear    | [ INFO ] api-client-2 (pid 12) - Process finished (34873 docs processed)
-lightyear    | [ INFO ] main-0 (pid 1) - All api_client processes have finished
-lightyear    | [ INFO ] validator-3 (pid 16) - Process finished (8471 docs processed)
-lightyear    | [ INFO ] validator-5 (pid 18) - Process finished (8680 docs processed)
-lightyear    | [ INFO ] monitor-1 (pid 8) - Queue sizes: queue_1=81, queue_2=7
+$ docker-compose run lightyear python main.py akeneo --account=faces
+Creating lightyear_lightyear_run ... done
+[ INFO ] main-0 (pid 1) - Starting 1 monitor process
+[ INFO ] main-0 (pid 1) - Starting 1 api_client process
+[ INFO ] api_client-2 (pid 13) - Process started
+[ INFO ] main-0 (pid 1) - Starting 4 validator process
+[ INFO ] validator-3 (pid 17) - Process started
+[ INFO ] validator-4 (pid 18) - Process started
+[ INFO ] validator-5 (pid 19) - Process started
+[ INFO ] validator-6 (pid 20) - Process started
+[ INFO ] main-0 (pid 1) - Starting 2 bigquery process
+[ INFO ] bigquery-7 (pid 24) - Process started
+[ INFO ] bigquery-8 (pid 25) - Process started
+[ INFO ] api_client-2 (pid 13) - 100 docs sent to queue_1
+[ INFO ] api_client-2 (pid 13) - 200 docs sent to queue_1
+[ INFO ] bigquery-7 (pid 24) - 100 docs sent to bigquery
+[ INFO ] api_client-2 (pid 13) - 300 docs sent to queue_1
+[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=26, queue_2=23
 ...
-lightyear    | [ INFO ] validator-4 (pid 17) - Process finished (8576 docs processed)
-lightyear    | [ INFO ] validator-6 (pid 19) - Process finished (9146 docs processed)
-lightyear    | [ INFO ] main-0 (pid 1) - All validator processes have finished
-lightyear    | [ INFO ] monitor-1 (pid 8) - Queue sizes: queue_1=0, queue_2=1
-lightyear    | [ INFO ] bigquery-7 (pid 23) - 17500 docs sent to bigquery
-lightyear    | [ INFO ] bigquery-7 (pid 23) - Process finished (17500 docs processed)
-lightyear    | [ INFO ] bigquery-8 (pid 24) - Process finished (17373 docs processed)
-lightyear    | [ INFO ] main-0 (pid 1) - All bigquery processes have finished
-lightyear exited with code 0
+[ INFO ] bigquery-8 (pid 25) - 2500 docs sent to bigquery
+[ INFO ] api_client-2 (pid 13) - 5000 docs sent to queue_1
+[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=95, queue_2=0
+...
+[ INFO ] bigquery-7 (pid 24) - 17500 docs sent to bigquery
+[ INFO ] bigquery-8 (pid 25) - 17300 docs sent to bigquery
+[ INFO ] api_client-2 (pid 13) - 34887 docs sent to queue_1
+[ INFO ] api_client-2 (pid 13) - Process finished (34887 docs processed)
+[ INFO ] main-0 (pid 1) - All api_client processes have finished
+[ INFO ] validator-6 (pid 20) - Process finished (9078 docs processed)
+[ INFO ] validator-5 (pid 19) - Process finished (8432 docs processed)
+[ INFO ] validator-4 (pid 18) - Process finished (8582 docs processed)
+[ INFO ] validator-3 (pid 17) - Process finished (8795 docs processed)
+[ INFO ] main-0 (pid 1) - All validator processes have finished
+[ INFO ] bigquery-7 (pid 24) - Process finished (17504 docs processed)
+[ INFO ] bigquery-8 (pid 25) - Process finished (17383 docs processed)
+[ INFO ] main-0 (pid 1) - All bigquery processes have finished
 ```
 
 ### Parallel running processes
 
 ```sh
-$ docker exec lightyear /bin/bash -c 'ps fax'
+$ docker exec <container-id> /bin/bash -c 'ps fax'
   PID TTY      STAT   TIME COMMAND
-    1 ?        Ss     0:00 python main.py akeneo --account=faces
-    8 ?        S      0:00 python main.py akeneo --account=faces
-   12 ?        Sl     0:00 python main.py akeneo --account=faces
-   16 ?        Sl     0:00 python main.py akeneo --account=faces
-   17 ?        Sl     0:00 python main.py akeneo --account=faces
-   18 ?        Sl     0:00 python main.py akeneo --account=faces
-   19 ?        Sl     0:00 python main.py akeneo --account=faces
-   23 ?        S      0:00 python main.py akeneo --account=faces
-   24 ?        S      0:00 python main.py akeneo --account=faces
+    1 pts/0    Ss+    0:00 python main.py akeneo --account=faces
+    9 pts/0    S+     0:00 python main.py akeneo --account=faces
+   13 pts/0    Sl+    0:03 python main.py akeneo --account=faces
+   17 pts/0    Sl+    0:00 python main.py akeneo --account=faces
+   18 pts/0    Sl+    0:00 python main.py akeneo --account=faces
+   19 pts/0    Sl+    0:00 python main.py akeneo --account=faces
+   20 pts/0    Sl+    0:00 python main.py akeneo --account=faces
+   24 pts/0    S+     0:00 python main.py akeneo --account=faces
+   25 pts/0    S+     0:00 python main.py akeneo --account=faces
 ```
