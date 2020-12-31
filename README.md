@@ -21,7 +21,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -l {error,warning,info,debug}, --log-level {error,warning,info,debug}
-                        error,warning,info,debug
+                        set the logging level (default: info)
 ```
 
 ## Development

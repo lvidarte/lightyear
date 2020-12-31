@@ -17,7 +17,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '-l',
         '--log-level',
-        help='error,warning,info,debug',
+        help='set the logging level (default: info)',
         choices=['error','warning','info','debug'],
         default='info',
     )

@@ -15,7 +15,7 @@ usage: lightyear akeneo [-h] [-a {faces,tryano}]
 optional arguments:
   -h, --help            show this help message and exit
   -a {faces,tryano}, --account {faces,tryano}
-                        The Akeneo account
+                        the akeneo account
 ```
 
 ### Log example

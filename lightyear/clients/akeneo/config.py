@@ -34,7 +34,7 @@ class Config:
             (
                 ('-a', '--account'),
                 {
-                    'help': 'The Akeneo account',
+                    'help': 'the akeneo account',
                     'choices': ['faces', 'tryano'],
                 },
             ),
