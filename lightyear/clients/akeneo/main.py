@@ -24,7 +24,7 @@ class Akeneo:
     def monitor_proc(self, queue_1, queue_2):
         """Monitor process"""
         import time
-        logger = get_logger(f"monitor-{self._process_id()}")
+        logger = get_logger(self._process_id('monitor_proc'))
         while True:
             try:
                 queue_1_size = queue_1.qsize()
@@ -39,7 +39,7 @@ class Akeneo:
 
     def api_client_proc(self, queue_1):
         """Akeneo API client process"""
-        logger = get_logger(f"api-client-{self._process_id()}")
+        logger = get_logger(self._process_id('api_client_proc'))
         logger.info(f"Process started")
         token = self._auth()
         params = None
@@ -59,7 +59,7 @@ class Akeneo:
 
     def doc_validator_proc(self, queue_1, queue_2):
         """BigQuery doc validator"""
-        logger = get_logger(f"validator-{self._process_id()}")
+        logger = get_logger(self._process_id('doc_validator_proc'))
         logger.info(f"Process started")
         count = 0
         while True:
@@ -76,7 +76,7 @@ class Akeneo:
 
     def bigquery_proc(self, queue_2):
         """BigQuery insert process"""
-        logger = get_logger(f"bigquery-{self._process_id()}")
+        logger = get_logger(self._process_id('bigquery_proc'))
         logger.info(f"Process started")
         count = 0
         docs = []
@@ -150,6 +150,10 @@ class Akeneo:
             return doc["_embedded"]["items"], next_params
 
 
-    def _process_id(self):
-        return current_process()._identity[0]
-
+    def _process_id(self, fn_name):
+        name = ''
+        for process in config.pipeline:
+            if process['function'] == fn_name:
+                name = process['name']
+        id_ = current_process()._identity[0]
+        return f"{name}-{id_}"

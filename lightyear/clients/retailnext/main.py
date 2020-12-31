@@ -21,7 +21,7 @@ class RetailNext:
     def monitor_proc(self, queue_1, queue_2):
         """Monitor process"""
         import time
-        logger = get_logger(f"monitor-{self._process_id()}")
+        logger = get_logger(self._process_id('monitor_proc'))
         while True:
             try:
                 queue_1_size = queue_1.qsize()
@@ -36,7 +36,7 @@ class RetailNext:
 
     def api_client_location_proc(self, queue_1):
         """RetailNext API client location process"""
-        logger = get_logger(f"api-client-location-{self._process_id()}")
+        logger = get_logger(self._process_id('api_client_location_proc'))
         logger.info(f"Process started")
         session = self._session()
         location_url = config.api['url'] + '/location'
@@ -58,7 +58,7 @@ class RetailNext:
 
     def api_client_datamine_proc(self, queue_1, queue_2):
         """RetailNext API client datamine process"""
-        logger = get_logger(f"validator-{self._process_id()}")
+        logger = get_logger(self._process_id('api_client_datamine_proc'))
         logger.info(f"Process started")
         session = self._session()
         datamine_url = config.api['url'] + '/datamine'
@@ -88,7 +88,7 @@ class RetailNext:
 
     def bigquery_proc(self, queue_2):
         """BigQuery insert process"""
-        logger = get_logger(f"bigquery-{self._process_id()}")
+        logger = get_logger(self._process_id('bigquery_proc'))
         logger.info(f"Process started")
         count = 0
         docs = []
@@ -138,6 +138,11 @@ class RetailNext:
         session.auth = (config.api['access_key'], config.api['secret_key'])
         return session
 
-    def _process_id(self):
-        return current_process()._identity[0]
+    def _process_id(self, fn_name):
+        name = ''
+        for process in config.pipeline:
+            if process['function'] == fn_name:
+                name = process['name']
+        id_ = current_process()._identity[0]
+        return f"{name}-{id_}"
 
