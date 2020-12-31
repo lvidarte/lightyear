@@ -1,4 +1,4 @@
-"""Engine
+"""Lightyear Engine
 """
 
 import importlib
@@ -7,15 +7,15 @@ import multiprocessing
 from lightyear.core.logger import get_logger
 
 
-def run(client, args):
+def run(client_config, args):
     logger = get_logger()
-    module = importlib.import_module(client.module_name)
-    client_obj = getattr(module, client.class_name)(args)
+    module = importlib.import_module(client_config.module_name)
+    client_obj = getattr(module, client_config.class_name)(client_config, args)
     context = multiprocessing.get_context('fork')
-    queues = {name: context.Queue() for name in client.queues}
+    queues = {name: context.Queue() for name in client_config.queues}
     pools = []
 
-    for process in client.pipeline:
+    for process in client_config.pipeline:
         logger.info(f"Starting {process['instances']} {process['name']} process")
         params = tuple(queues[name] for name in process['queues'])
         pool = context.Pool(

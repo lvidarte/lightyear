@@ -4,24 +4,25 @@
 import json
 import requests
 
-from multiprocessing import current_process
 from datetime import datetime, timedelta
 
 from lightyear.core.logger import get_logger
 from lightyear.core.bigquery import BigQuery
 from lightyear.core import config as common_config
-from .config import config
+from lightyear.core import Pipeline
 
 
-class RetailNext:
+class RetailNext(Pipeline):
 
-    def __init__(self, args):
-        self.bigquery = BigQuery(**config.gcp)
+    def __init__(self, config, args):
+        super().__init__(config, args)
+        self.bigquery = BigQuery(**self.config.gcp)
+
 
     def monitor_proc(self, queue_1, queue_2):
         """Monitor process"""
         import time
-        logger = get_logger(self._process_id('monitor_proc'))
+        logger = get_logger(self.process_id('monitor_proc'))
         while True:
             try:
                 queue_1_size = queue_1.qsize()
@@ -36,10 +37,10 @@ class RetailNext:
 
     def api_client_location_proc(self, queue_1):
         """RetailNext API client location process"""
-        logger = get_logger(self._process_id('api_client_location_proc'))
+        logger = get_logger(self.process_id('api_client_location_proc'))
         logger.info(f"Process started")
         session = self._session()
-        location_url = config.api['url'] + '/location'
+        location_url = self.config.api['url'] + '/location'
         page_start = "0"
         count = 0
         while True:
@@ -58,10 +59,10 @@ class RetailNext:
 
     def api_client_datamine_proc(self, queue_1, queue_2):
         """RetailNext API client datamine process"""
-        logger = get_logger(self._process_id('api_client_datamine_proc'))
+        logger = get_logger(self.process_id('api_client_datamine_proc'))
         logger.info(f"Process started")
         session = self._session()
-        datamine_url = config.api['url'] + '/datamine'
+        datamine_url = self.config.api['url'] + '/datamine'
         date = self._last_day()
         first_day, last_day = self._date_ranges()
         count = 0
@@ -88,21 +89,21 @@ class RetailNext:
 
     def bigquery_proc(self, queue_2):
         """BigQuery insert process"""
-        logger = get_logger(self._process_id('bigquery_proc'))
+        logger = get_logger(self.process_id('bigquery_proc'))
         logger.info(f"Process started")
         count = 0
         docs = []
         while True:
             doc = queue_2.get()
             if doc == 'DONE':
-                #if docs:
-                #    self.bigquery.insert(docs)
+                if docs:
+                    self.bigquery.insert(docs)
                 break
             else:
                 docs.append(doc)
                 count += 1
                 if count % 100 == 0:
-                    #self.bigquery.insert(docs)
+                    self.bigquery.insert(docs)
                     logger.info(f"{count} docs sent to bigquery")
                     docs = []
         logger.info(f"Process finished ({count} docs processed)")
@@ -135,14 +136,5 @@ class RetailNext:
 
     def _session(self):
         session = requests.Session()
-        session.auth = (config.api['access_key'], config.api['secret_key'])
+        session.auth = (self.config.api['access_key'], self.config.api['secret_key'])
         return session
-
-    def _process_id(self, fn_name):
-        name = ''
-        for process in config.pipeline:
-            if process['function'] == fn_name:
-                name = process['name']
-        id_ = current_process()._identity[0]
-        return f"{name}-{id_}"
-

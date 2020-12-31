@@ -4,27 +4,27 @@
 import requests
 
 from urllib.parse import urlsplit, parse_qs
-from multiprocessing import current_process
 from datetime import datetime
 
 from lightyear.core.logger import get_logger
 from lightyear.core.bigquery import BigQuery
 from lightyear.core import config as common_config
-from .config import config
+from lightyear.core import Pipeline
 
 
-class Akeneo:
+class Akeneo(Pipeline):
 
-    def __init__(self, args):
-        self.account = args.account
-        self.credentials = config.api['accounts'][self.account]
-        self.bigquery = BigQuery(**config.gcp)
+    def __init__(self, config, args):
+        super().__init__(config, args)
+        self.account = self.args.account
+        self.credentials = self.config.api['accounts'][self.account]
+        self.bigquery = BigQuery(**self.config.gcp)
 
 
     def monitor_proc(self, queue_1, queue_2):
         """Monitor process"""
         import time
-        logger = get_logger(self._process_id('monitor_proc'))
+        logger = get_logger(self.process_id('monitor_proc'))
         while True:
             try:
                 queue_1_size = queue_1.qsize()
@@ -39,7 +39,7 @@ class Akeneo:
 
     def api_client_proc(self, queue_1):
         """Akeneo API client process"""
-        logger = get_logger(self._process_id('api_client_proc'))
+        logger = get_logger(self.process_id('api_client_proc'))
         logger.info(f"Process started")
         token = self._auth()
         params = None
@@ -59,7 +59,7 @@ class Akeneo:
 
     def doc_validator_proc(self, queue_1, queue_2):
         """BigQuery doc validator"""
-        logger = get_logger(self._process_id('doc_validator_proc'))
+        logger = get_logger(self.process_id('doc_validator_proc'))
         logger.info(f"Process started")
         count = 0
         while True:
@@ -76,7 +76,7 @@ class Akeneo:
 
     def bigquery_proc(self, queue_2):
         """BigQuery insert process"""
-        logger = get_logger(self._process_id('bigquery_proc'))
+        logger = get_logger(self.process_id('bigquery_proc'))
         logger.info(f"Process started")
         count = 0
         docs = []
@@ -112,10 +112,10 @@ class Akeneo:
 
 
     def _auth(self):
-        url = config.api['url'] + '/api/oauth/v1/token'
+        url = self.config.api['url'] + '/api/oauth/v1/token'
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Basic {config.api['key']}",
+            "Authorization": f"Basic {self.config.api['key']}",
         }
         res = requests.post(url, json=self.credentials, headers=headers)
         if res.status_code == 200:
@@ -129,7 +129,7 @@ class Akeneo:
 
 
     def _products(self, token, params=None):
-        url = config.api['url'] + '/api/rest/v1/products'
+        url = self.config.api['url'] + '/api/rest/v1/products'
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {token}",
@@ -138,7 +138,7 @@ class Akeneo:
             params = {
                 "pagination_type": "search_after",
                 "search_after": None,
-                "limit": config.api['max_items_per_request'],
+                "limit": self.config.api['max_items_per_request'],
             }
         res = requests.get(url, params=params, headers=headers)
         if res.status_code == 200:
@@ -148,12 +148,3 @@ class Akeneo:
             except:
                 next_params = None
             return doc["_embedded"]["items"], next_params
-
-
-    def _process_id(self, fn_name):
-        name = ''
-        for process in config.pipeline:
-            if process['function'] == fn_name:
-                name = process['name']
-        id_ = current_process()._identity[0]
-        return f"{name}-{id_}"

@@ -30,6 +30,6 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     logger.set_level(args.log_level)
-    client = config.clients[args.client]
-    engine.run(client, args)
+    client_config = config.clients[args.client]
+    engine.run(client_config, args)
 
