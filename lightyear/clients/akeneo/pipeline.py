@@ -58,7 +58,7 @@ class Akeneo(Pipeline):
 
 
     def doc_formatter_proc(self, queue_1, queue_2):
-        """BigQuery doc validator"""
+        """Custom format"""
         logger = self.get_logger('doc_formatter_proc')
         logger.info(f"Process started")
         count = 0
@@ -75,7 +75,7 @@ class Akeneo(Pipeline):
 
 
     def doc_validator_proc(self, queue_2, queue_3):
-        """BigQuery doc validator"""
+        """Validate if doc already in BigQuery"""
         logger = self.get_logger('doc_validator_proc')
         logger.info(f"Process started")
         count = 0
