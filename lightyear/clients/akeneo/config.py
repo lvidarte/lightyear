@@ -45,7 +45,7 @@ class Config:
             'queue_2',
         ]
 
-        self.module_name = 'lightyear.clients.akeneo.main'
+        self.module_name = 'lightyear.clients.akeneo.pipeline'
         self.class_name = 'Akeneo'
 
         self.pipeline = [
