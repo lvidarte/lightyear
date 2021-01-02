@@ -43,6 +43,7 @@ class Config:
         self.queues = [
             'queue_1',
             'queue_2',
+            'queue_3',
         ]
 
         self.module_name = 'lightyear.clients.akeneo.pipeline'
@@ -55,6 +56,7 @@ class Config:
                 'queues': [
                     'queue_1',
                     'queue_2',
+                    'queue_3',
                 ],
                 'instances': 1,
                 'join': False,
@@ -77,8 +79,8 @@ class Config:
                 ],
             },
             {
-                'name': 'validator',
-                'function': 'doc_validator_proc',
+                'name': 'formatter',
+                'function': 'doc_formatter_proc',
                 'queues': [
                     'queue_1',
                     'queue_2',
@@ -89,6 +91,23 @@ class Config:
                     {
                         'name': 'queue_2',
                         'done_message': 'DONE',
+                        'total_messages': 4,
+                    }
+                ],
+            },
+            {
+                'name': 'validator',
+                'function': 'doc_validator_proc',
+                'queues': [
+                    'queue_2',
+                    'queue_3',
+                ],
+                'instances': 4,
+                'join': True,
+                'queues_to_close': [
+                    {
+                        'name': 'queue_3',
+                        'done_message': 'DONE',
                         'total_messages': 2,
                     }
                 ],
@@ -97,7 +116,7 @@ class Config:
                 'name': 'bigquery',
                 'function': 'bigquery_proc',
                 'queues': [
-                    'queue_2',
+                    'queue_3',
                 ],
                 'instances': 2,
                 'join': True,

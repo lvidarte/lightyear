@@ -20,7 +20,7 @@ class Akeneo(Pipeline):
         self.bigquery = BigQuery(**self.config.gcp)
 
 
-    def monitor_proc(self, queue_1, queue_2):
+    def monitor_proc(self, queue_1, queue_2, queue_3):
         """Monitor process"""
         import time
         logger = self.get_logger('monitor_proc')
@@ -28,8 +28,9 @@ class Akeneo(Pipeline):
             try:
                 queue_1_size = queue_1.qsize()
                 queue_2_size = queue_2.qsize()
-                if queue_1_size or queue_2_size:
-                    logger.info(f"Queue sizes: queue_1={queue_1_size}, queue_2={queue_2_size}")
+                queue_3_size = queue_3.qsize()
+                if queue_1_size or queue_2_size or queue_3_size:
+                    logger.info(f"Queue sizes: queue_1={queue_1_size}, queue_2={queue_2_size}, queue_3={queue_3_size}")
                 time.sleep(.1)
             except NotImplementedError:
                 logger.error("Unable to show queue size (running macos?)")
@@ -56,9 +57,9 @@ class Akeneo(Pipeline):
         logger.info(f"Process finished ({count} docs processed)")
 
 
-    def doc_validator_proc(self, queue_1, queue_2):
+    def doc_formatter_proc(self, queue_1, queue_2):
         """BigQuery doc validator"""
-        logger = self.get_logger('doc_validator_proc')
+        logger = self.get_logger('doc_formatter_proc')
         logger.info(f"Process started")
         count = 0
         while True:
@@ -73,14 +74,31 @@ class Akeneo(Pipeline):
         logger.info(f"Process finished ({count} docs processed)")
 
 
-    def bigquery_proc(self, queue_2):
+    def doc_validator_proc(self, queue_2, queue_3):
+        """BigQuery doc validator"""
+        logger = self.get_logger('doc_validator_proc')
+        logger.info(f"Process started")
+        count = 0
+        while True:
+            doc = queue_2.get()
+            if doc == 'DONE':
+                break
+            else:
+                count += 1
+                queue_3.put(doc)  # Check here if doc already in bigquery
+            if count % 100 == 0:
+                logger.info(f"{count} docs sent to queue_3")
+        logger.info(f"Process finished ({count} docs processed)")
+
+
+    def bigquery_proc(self, queue_3):
         """BigQuery insert process"""
         logger = self.get_logger('bigquery_proc')
         logger.info(f"Process started")
         count = 0
         docs = []
         while True:
-            doc = queue_2.get()
+            doc = queue_3.get()
             if doc == 'DONE':
                 if docs:
                     self.bigquery.insert(docs)
