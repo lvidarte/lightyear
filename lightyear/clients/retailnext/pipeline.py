@@ -22,6 +22,7 @@ class RetailNext(Pipeline):
         """Monitor process"""
         import time
         logger = self.get_logger('monitor_proc')
+        logger.info(f"Process started")
         while True:
             try:
                 queue_1_size = queue_1.qsize()
