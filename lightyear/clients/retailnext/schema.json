@@ -1,0 +1,147 @@
+[
+    {
+        "name": "date",
+        "type": "DATE",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "location",
+        "type": "RECORD",
+        "mode": "REQUIRED",
+        "fields": [
+            {
+                "name": "id",
+                "type": "STRING",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "name",
+                "type": "STRING",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "type",
+                "type": "STRING",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "parent_id",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "time_zone",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "current_utc_offset",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "time_zone_abbrev",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "store_id",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "comp_start_date",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "archive_date",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "address",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "currency",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            }
+        ]
+    },
+    {
+        "name": "metrics",
+        "type": "RECORD",
+        "mode": "REPEATED",
+        "fields": [
+            {
+                "name": "name",
+                "type": "STRING",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "ok",
+                "type": "BOOLEAN",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "data",
+                "type": "RECORD",
+                "mode": "REPEATED",
+                "fields": [
+                    {
+                        "name": "index",
+                        "type": "INTEGER",
+                        "mode": "REQUIRED"
+                    },
+                    {
+                        "name": "value",
+                        "type": "INTEGER",
+                        "mode": "REQUIRED"
+                    },
+                    {
+                        "name": "validity",
+                        "type": "STRING",
+                        "mode": "REQUIRED"
+                    },
+                    {
+                        "name": "group",
+                        "type": "RECORD",
+                        "mode": "REQUIRED",
+                        "fields": [
+                            {
+                                "name": "start",
+                                "type": "STRING",
+                                "mode": "REQUIRED"
+                            },
+                            {
+                                "name": "finish",
+                                "type": "STRING",
+                                "mode": "REQUIRED"
+                            },
+                            {
+                                "name": "type",
+                                "type": "STRING",
+                                "mode": "REQUIRED"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "metadata",
+        "type": "RECORD",
+        "mode": "REQUIRED",
+        "fields": [
+            {
+                "name": "ingestion_time",
+                "type": "TIMESTAMP",
+                "mode": "REQUIRED"
+            }
+        ]
+    }
+]
