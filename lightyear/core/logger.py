@@ -4,6 +4,8 @@
 import sys
 import logging
 
+from . import config
+
 log_level = logging.DEBUG
 
 
@@ -23,7 +25,8 @@ def get_logger(name='main-0', level=None):
         levle = log_level
     logger = logging.getLogger(name)
     handler = logging.StreamHandler(sys.stdout)
-    formatter = logging.Formatter("[ %(levelname)s ] %(name)s (pid %(process)d) - %(message)s")
+    fmt = "[ %(levelname)s ] %(asctime)s | %(name)s (pid %(process)d) | %(message)s"
+    formatter = logging.Formatter(fmt, datefmt='%Y-%m-%d %H:%M:%S')
     handler.setFormatter(formatter)
     handler.setLevel(log_level)
     logger.addHandler(handler)
