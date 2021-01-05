@@ -3,6 +3,7 @@
 
 import requests
 
+from base64 import b64encode
 from urllib.parse import urlsplit, parse_qs
 from datetime import datetime
 
@@ -15,9 +16,8 @@ class Akeneo(Pipeline):
 
     def __init__(self, config, args):
         super().__init__(config, args)
-        self.account = self.args.account
-        self.credentials = self.config.api['accounts'][self.account]
-        self.bigquery = BigQuery(**self.config.gcp)
+        self.account = config.accounts[args.account]
+        self.bigquery = BigQuery(**config.gcp)
 
 
     def monitor_proc(self, queue_1, queue_2, queue_3):
@@ -118,7 +118,7 @@ class Akeneo(Pipeline):
         """Need to work on this..."""
         return {
             'id': doc['identifier'],
-            'account': self.account,   # faces, tryano
+            'account': self.account['name'], # faces, tryano
             'enabled': doc['enabled'],
             'family': doc['family'],
             'created': doc['created'],
@@ -130,14 +130,17 @@ class Akeneo(Pipeline):
 
 
     def _auth(self):
-        url = self.config.api['url'] + '/api/oauth/v1/token'
+        url = self.account['api_url'] + '/api/oauth/v1/token'
+        key = b64encode(f'{self.account["client_id"]}:{self.account["secret"]}'.encode('ascii'))
         headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Basic {self.config.api['key']}",
+            'Content-Type': 'application/json',
+            'Authorization': f'Basic {key.decode()}',
         }
-        res = requests.post(url, json=self.credentials, headers=headers)
+        res = requests.post(url, json=self.account['credentials'], headers=headers)
         if res.status_code == 200:
-            return res.json()["access_token"]
+            return res.json()['access_token']
+        else:
+            raise Exception(f'{res.status_code} {res.text}')
 
 
     def _parse_params(self, url):
@@ -147,22 +150,24 @@ class Akeneo(Pipeline):
 
 
     def _products(self, token, params=None):
-        url = self.config.api['url'] + '/api/rest/v1/products'
+        url = self.account['api_url'] + '/api/rest/v1/products'
         headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {token}",
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {token}',
         }
         if params is None:
             params = {
-                "pagination_type": "search_after",
-                "search_after": None,
-                "limit": self.config.api['max_items_per_request'],
+                'pagination_type': 'search_after',
+                'search_after': None,
+                'limit': self.account['max_items_per_request'],
             }
         res = requests.get(url, params=params, headers=headers)
         if res.status_code == 200:
             doc = res.json()
             try:
-                next_params = self._parse_params(doc["_links"]["next"]["href"])
+                next_params = self._parse_params(doc['_links']['next']['href'])
             except:
                 next_params = None
-            return doc["_embedded"]["items"], next_params
+            return doc['_embedded']['items'], next_params
+        else:
+            raise Exception(f'{res.status_code} {res.text}')

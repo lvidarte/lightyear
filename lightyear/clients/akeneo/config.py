@@ -12,20 +12,29 @@ class Config:
             'table_id': 'akeneo',
         }
 
-        self.api = {
-            'url': 'https://chalhoub.cloud.akeneo.com',
-            'key': 'NF8zdnJxdHdqMnpsYzBvbzhnb2s0d2NjY2NzOG9rc284YzAwd29rbzR3MG9jZ2t3d3c4NDoydnNmcWhvcnhhbThrY3cwa2s0d3M0czBzNGc0NDhzNDhjb2M4b2tvdzhrNDRnZ2M0cw==',
-            'max_items_per_request': 100,
-            'accounts': {
-                'faces': {
-                    "grant_type": "password",
-                    "username": "catalogapi_8178",
-                    "password": "a929756f2",
+        self.accounts = {
+            'faces': {
+                'name': 'faces',
+                'api_url': 'https://chalhoub.cloud.akeneo.com',
+                'client_id': '4_3vrqtwj2zlc0oo8gok4wccccs8okso8c00woko4w0ocgkwww84',
+                'secret': '2vsfqhorxam8kcw0kk4ws4s0s4g448s48coc8okow8k44ggc4s',
+                'max_items_per_request': 100,
+                'credentials': {
+                    'grant_type': 'password',
+                    'username': 'catalogapi_8178',
+                    'password': 'a929756f2',
                 },
-                'tryano': {
-                    "grant_type": "password",
-                    "username": "catalogapi_8178",
-                    "password": "a929756f2",
+            },
+            'tryano': {
+                'name': 'tryano',
+                'api_url': 'https://tryano.cloud.akeneo.com',
+                'client_id': '4_2kv5pfy9c4g0sc08k4g8o8c4ggosso8ccg8sgks4gcg4sgkoo0',
+                'secret': '3e87s6dxl8qos80k4sgw0gcsokcocgcowc8kw0kggckwc8sw00',
+                'max_items_per_request': 100,
+                'credentials': {
+                    'grant_type': 'password',
+                    'username': 'datateam_integration_1696',
+                    'password': '34fb25c6b',
                 },
             },
         }
