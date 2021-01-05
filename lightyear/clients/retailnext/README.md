@@ -21,59 +21,38 @@ optional arguments:
 ```sh
 $ docker-compose run lightyear python main.py retailnext
 Creating lightyear_lightyear_run ... done
-[ INFO ] main-0 (pid 1) - Starting 1 monitor process
-[ INFO ] main-0 (pid 1) - Starting 1 api_client_location process
-[ INFO ] api_client_location-2 (pid 13) - Process started
-[ INFO ] main-0 (pid 1) - Starting 4 api_client_datamine process
-[ INFO ] api_client_datamine-3 (pid 17) - Process started
-[ INFO ] api_client_datamine-4 (pid 18) - Process started
-[ INFO ] api_client_datamine-5 (pid 19) - Process started
-[ INFO ] main-0 (pid 1) - Starting 2 bigquery process
-[ INFO ] api_client_datamine-6 (pid 20) - Process started
-[ INFO ] bigquery-7 (pid 24) - Process started
-[ INFO ] bigquery-8 (pid 25) - Process started
-[ INFO ] api_client_datamine-3 (pid 17) - Getting metrics for location Swarovski
-[ INFO ] api_client_datamine-4 (pid 18) - Getting metrics for location UAE
-[ INFO ] api_client_datamine-5 (pid 19) - Getting metrics for location KSA
-[ INFO ] api_client_datamine-6 (pid 20) - Getting metrics for location Qatar
-[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=46, queue_2=0
-[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=46, queue_2=0
-[ INFO ] api_client_datamine-6 (pid 20) - Getting metrics for location Kuwait
-[ INFO ] api_client_datamine-4 (pid 18) - Getting metrics for location Abu Dhabi
-[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=94, queue_2=0
-[ INFO ] api_client_datamine-3 (pid 17) - Getting metrics for location Dubai
-[ INFO ] api_client_datamine-5 (pid 19) - Getting metrics for location Al Ain
-[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=92, queue_2=0
-[ INFO ] api_client_datamine-6 (pid 20) - Getting metrics for location Riyad
-[ INFO ] api_client_datamine-4 (pid 18) - Getting metrics for location Jeddah
-[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=131, queue_2=0
-[ INFO ] api_client_datamine-6 (pid 20) - Getting metrics for location SWAROVSKI @ Hamra Mall
-[ INFO ] api_client_datamine-4 (pid 18) - Getting metrics for location SWAROVSKI @ Hayatt Mall
-[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=129, queue_2=0
-[ INFO ] api_client_datamine-3 (pid 17) - Getting metrics for location SWAROVSKI @ Nakheel Mall
-[ INFO ] api_client_datamine-5 (pid 19) - Getting metrics for location SWAROVSKI @ Riyadh Park
-[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=127, queue_2=0
-[ INFO ] api_client_datamine-6 (pid 20) - Getting metrics for location SWAROVSKI @ Riyadh Gallery
-[ INFO ] api_client_datamine-4 (pid 18) - Getting metrics for location SWAROVSKI @ Kingdom Center
+[ INFO ] 2021-01-05 14:44:24 | main-0 (pid 1) | Starting 1 monitor process
+[ INFO ] 2021-01-05 14:44:24 | monitor-1 (pid 10) | Process started
+[ INFO ] 2021-01-05 14:44:24 | main-0 (pid 1) | Starting 1 api_client_location process
+[ INFO ] 2021-01-05 14:44:24 | main-0 (pid 1) | Starting 4 api_client_datamine process
+[ INFO ] 2021-01-05 14:44:24 | api_client_datamine-3 (pid 18) | Process started
+[ INFO ] 2021-01-05 14:44:24 | api_client_location-2 (pid 14) | Process started
+[ INFO ] 2021-01-05 14:44:24 | api_client_datamine-4 (pid 19) | Process started
+[ INFO ] 2021-01-05 14:44:24 | api_client_datamine-5 (pid 20) | Process started
+[ INFO ] 2021-01-05 14:44:24 | main-0 (pid 1) | Starting 2 bigquery process
+[ INFO ] 2021-01-05 14:44:24 | api_client_datamine-6 (pid 21) | Process started
+[ INFO ] 2021-01-05 14:44:24 | bigquery-7 (pid 25) | Process started
+[ INFO ] 2021-01-05 14:44:24 | bigquery-8 (pid 26) | Process started
+[ INFO ] 2021-01-05 14:44:24 | api_client_datamine-3 (pid 18) | Getting metrics for location Swarovski
+[ INFO ] 2021-01-05 14:44:24 | api_client_datamine-4 (pid 19) | Getting metrics for location UAE
+[ INFO ] 2021-01-05 14:44:24 | api_client_datamine-5 (pid 20) | Getting metrics for location KSA
+[ INFO ] 2021-01-05 14:44:24 | api_client_datamine-6 (pid 21) | Getting metrics for location Qatar
+[ INFO ] 2021-01-05 14:44:24 | monitor-1 (pid 10) | Queue sizes: queue_1=46, queue_2=0
 ...
-[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=33, queue_2=0
-[ INFO ] api_client_datamine-3 (pid 17) - Getting metrics for location SWAROVSKI @ Nakheel Dammam
-[ INFO ] api_client_datamine-4 (pid 18) - Getting metrics for location Swarovski @ Al Maryah Central
-[ INFO ] api_client_datamine-5 (pid 19) - Getting metrics for location Al Qassim
-[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=27, queue_2=0
-[ INFO ] api_client_datamine-6 (pid 20) - Getting metrics for location SWAROVSKI @ Nakheel Plaza Qassim
-[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=25, queue_2=0
-[ INFO ] api_client_datamine-5 (pid 19) - Getting metrics for location SWAROVSKI @ Faisaliya
-[ INFO ] api_client_datamine-4 (pid 18) - Getting metrics for location ECOMMERCE - KSA
-[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=21, queue_2=0
-[ INFO ] api_client_datamine-4 (pid 18) - Process finished (40 docs processed)
-[ INFO ] api_client_datamine-6 (pid 20) - Process finished (40 docs processed)
-[ INFO ] monitor-1 (pid 9) - Queue sizes: queue_1=1, queue_2=0
-[ INFO ] api_client_datamine-3 (pid 17) - Process finished (40 docs processed)
-[ INFO ] main-0 (pid 1) - All api_client_datamine processes have finished
-[ INFO ] bigquery-7 (pid 24) - Process finished (67 docs processed)
-[ INFO ] bigquery-8 (pid 25) - Process finished (92 docs processed)
-[ INFO ] main-0 (pid 1) - All bigquery processes have finished
+[ INFO ] 2021-01-05 14:44:32 | api_client_datamine-6 (pid 21) | Getting metrics for location SWAROVSKI @ PODIUM - KSA
+[ INFO ] 2021-01-05 14:44:33 | monitor-1 (pid 10) | Queue sizes: queue_1=6, queue_2=0
+[ INFO ] 2021-01-05 14:44:33 | api_client_datamine-3 (pid 18) | Getting metrics for location Abha
+[ INFO ] 2021-01-05 14:44:33 | api_client_datamine-4 (pid 19) | Getting metrics for location Entrance 1
+[ INFO ] 2021-01-05 14:44:33 | api_client_datamine-5 (pid 20) | Process finished (39 docs processed)
+[ INFO ] 2021-01-05 14:44:33 | monitor-1 (pid 10) | Queue sizes: queue_1=3, queue_2=0
+[ INFO ] 2021-01-05 14:44:33 | api_client_datamine-6 (pid 21) | Process finished (40 docs processed)
+[ INFO ] 2021-01-05 14:44:33 | monitor-1 (pid 10) | Queue sizes: queue_1=2, queue_2=0
+[ INFO ] 2021-01-05 14:44:33 | api_client_datamine-3 (pid 18) | Process finished (40 docs processed)
+[ INFO ] 2021-01-05 14:44:33 | api_client_datamine-4 (pid 19) | Process finished (40 docs processed)
+[ INFO ] 2021-01-05 14:44:33 | main-0 (pid 1) | All api_client_datamine processes have finished
+[ INFO ] 2021-01-05 14:44:37 | bigquery-8 (pid 26) | Process finished (77 docs processed)
+[ INFO ] 2021-01-05 14:44:37 | bigquery-7 (pid 25) | Process finished (82 docs processed)
+[ INFO ] 2021-01-05 14:44:37 | main-0 (pid 1) | All bigquery processes have finished
 ```
 
 ### Parallel running processes
@@ -82,12 +61,12 @@ Creating lightyear_lightyear_run ... done
 $ docker exec <container-id> /bin/bash -c 'ps fax'
   PID TTY      STAT   TIME COMMAND
     1 ?        Ss     0:00 python main.py retailnext
-    9 ?        S      0:00 python main.py retailnext
-   13 ?        Sl     0:00 python main.py retailnext
-   17 ?        Sl     0:00 python main.py retailnext
+   10 ?        S      0:00 python main.py retailnext
+   14 ?        Sl     0:00 python main.py retailnext
    18 ?        Sl     0:00 python main.py retailnext
    19 ?        Sl     0:00 python main.py retailnext
    20 ?        Sl     0:00 python main.py retailnext
-   24 ?        S      0:00 python main.py retailnext
+   21 ?        Sl     0:00 python main.py retailnext
    25 ?        S      0:00 python main.py retailnext
+   26 ?        S      0:00 python main.py retailnext
 ```
