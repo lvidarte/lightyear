@@ -34,7 +34,7 @@ if __name__ == '__main__':
     try:
         client_config = config.clients[args.client]
         engine.run(client_config, args)
-    except:
-        print('Error')
+    except Exception as e:
+        print('Error:', e)
         parser.print_help()
 
