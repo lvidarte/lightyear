@@ -2,45 +2,43 @@
 """
 
 import json
-import requests
-
 from datetime import datetime, timedelta
 
-from lightyear.core.bigquery import BigQuery
-from lightyear.core import config as common_config
+import requests
+
 from lightyear.core import Pipeline
+from lightyear.core import config as common_config
+from lightyear.core.bigquery import BigQuery
 
 
 class RetailNext(Pipeline):
-
     def __init__(self, config, args):
         super().__init__(config, args)
         self.bigquery = BigQuery(**self.config.gcp)
 
-
     def monitor_proc(self, queue_1, queue_2):
         """Monitor process"""
         import time
-        logger = self.get_logger('monitor_proc')
-        logger.info(f"Process started")
+
+        logger = self.get_logger("monitor_proc")
+        logger.info("Process started")
         while True:
             try:
                 queue_1_size = queue_1.qsize()
                 queue_2_size = queue_2.qsize()
                 if queue_1_size or queue_2_size:
                     logger.info(f"Queue sizes: queue_1={queue_1_size}, queue_2={queue_2_size}")
-                time.sleep(.1)
+                time.sleep(0.1)
             except NotImplementedError:
                 logger.error("Unable to show queue size (running macos?)")
                 break
 
-
     def api_client_location_proc(self, queue_1):
         """RetailNext API client location process"""
-        logger = self.get_logger('api_client_location_proc')
-        logger.info(f"Process started")
+        logger = self.get_logger("api_client_location_proc")
+        logger.info("Process started")
         session = self._session()
-        location_url = self.config.api['url'] + '/location'
+        location_url = self.config.api["url"] + "/location"
         page_start = "0"
         count = 0
         while True:
@@ -56,28 +54,27 @@ class RetailNext(Pipeline):
                 break
         logger.info(f"Process finished ({count} docs processed)")
 
-
     def api_client_datamine_proc(self, queue_1, queue_2):
         """RetailNext API client datamine process"""
-        logger = self.get_logger('api_client_datamine_proc')
-        logger.info(f"Process started")
+        logger = self.get_logger("api_client_datamine_proc")
+        logger.info("Process started")
         session = self._session()
-        datamine_url = self.config.api['url'] + '/datamine'
+        datamine_url = self.config.api["url"] + "/datamine"
         date = self._last_day()
         first_day, last_day = self._date_ranges()
         count = 0
         while True:
             location = queue_1.get()
-            if location == 'DONE':
+            if location == "DONE":
                 break
             else:
                 logger.info(f"Getting metrics for location {location['name']}")
                 query = {
-                    'locations': [ location['id'] ],
-                    'time_ranges': [ { 'type': 'store_hours' } ],
-                    'group_bys': [ { 'value': 1, 'unit': 'hours', 'group': 'time' } ],
-                    'date_ranges': [ { 'first_day': date, 'last_day': date } ],
-                    'metrics': [ 'traffic_in', 'traffic_out' ]
+                    "locations": [location["id"]],
+                    "time_ranges": [{"type": "store_hours"}],
+                    "group_bys": [{"value": 1, "unit": "hours", "group": "time"}],
+                    "date_ranges": [{"first_day": date, "last_day": date}],
+                    "metrics": ["traffic_in", "traffic_out"],
                 }
                 response = session.post(datamine_url, data=json.dumps(query))
                 queue_2.put(self._format(date, location, response.json()))
@@ -86,16 +83,15 @@ class RetailNext(Pipeline):
                 logger.info(f"{count} docs sent to queue_2")
         logger.info(f"Process finished ({count} docs processed)")
 
-
     def bigquery_proc(self, queue_2):
         """BigQuery insert process"""
-        logger = self.get_logger('bigquery_proc')
-        logger.info(f"Process started")
+        logger = self.get_logger("bigquery_proc")
+        logger.info("Process started")
         count = 0
         docs = []
         while True:
             doc = queue_2.get()
-            if doc == 'DONE':
+            if doc == "DONE":
                 if docs:
                     self.bigquery.insert(docs)
                 break
@@ -108,21 +104,21 @@ class RetailNext(Pipeline):
                     docs = []
         logger.info(f"Process finished ({count} docs processed)")
 
-
     def _format(self, date, location, metrics):
         """BigQuery document format"""
-        del location['attributes']
-        if 'address' in location:
-            location['address'] = location['address'].get('street_address')
+        del location["attributes"]
+        if "address" in location:
+            location["address"] = location["address"].get("street_address")
+        # fmt: off
         return {
-            'date': date,
-            'location': location,
-            'metrics': metrics['metrics'],
-            'metadata': {
-                'ingestion_time': datetime.now().strftime(common_config.time_format),
+            "date": date,
+            "location": location,
+            "metrics": metrics["metrics"],
+            "metadata": {
+                "ingestion_time": datetime.now().strftime(common_config.time_format),
             },
         }
-
+        # fmt: on
 
     def _first_day(self):
         return self._date_timedelta(2)
@@ -140,7 +136,7 @@ class RetailNext(Pipeline):
     def _session(self):
         session = requests.Session()
         session.auth = (
-            self.config.api['access_key'],
-            self.config.api['secret_key'],
+            self.config.api["access_key"],
+            self.config.api["secret_key"],
         )
         return session

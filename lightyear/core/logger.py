@@ -10,12 +10,14 @@ fmt = "[ %(levelname)s ] %(asctime)s | %(name)s (pid %(process)d) | %(message)s"
 
 def set_level(level):
     global log_level
+    # fmt: off
     log_level = {
         "error": logging.ERROR,
         "warning": logging.WARNING,
         "info": logging.INFO,
         "debug": logging.DEBUG,
     }[level]
+    # fmt: on
 
 
 def get_logger(name="main-0", level=None):

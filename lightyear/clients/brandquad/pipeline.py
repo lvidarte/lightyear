@@ -117,9 +117,11 @@ class Brandquad(Pipeline):
 
     def _format(self, product):
         """BigQuery document format"""
+        # fmt: off
         return {
             "product": product,
             "metadata": {
                 "ingestion_time": datetime.now().strftime(common_config.time_format),
             },
         }
+        # fmt: on

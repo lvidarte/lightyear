@@ -5,6 +5,7 @@
 class Config:
     def __init__(self):
 
+        # fmt: off
         self.gcp = {
             "project_id": "chb-prod-ingest-ecom",
             "dataset_id": "lightyear",
@@ -102,6 +103,7 @@ class Config:
                 "queues_to_close": [],
             },
         ]
+        # fmt: on
 
 
 config = Config()

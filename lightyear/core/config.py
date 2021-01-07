@@ -9,6 +9,7 @@ from lightyear.clients.retailnext import config as retailnext_config
 class Config:
     def __init__(self):
 
+        # fmt: off
         self.gcp = {
             "project_id": "chb-prod-ingest-ecom",
             "dataset_id": "",
@@ -27,6 +28,7 @@ class Config:
         self.slack = {
             "url": "https://hooks.slack.com/services/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",
         }
+        # fmt: on
 
 
 config = Config()
