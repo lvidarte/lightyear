@@ -1,6 +1,7 @@
 """Brandquad pipeline class
 """
 
+import time
 from datetime import datetime
 
 import requests
@@ -17,8 +18,6 @@ class Brandquad(Pipeline):
 
     def monitor_proc(self, queue_1, queue_2, queue_3):
         """Monitor process"""
-        import time
-
         logger = self.get_logger("monitor_proc")
         logger.info("Process started")
         while True:

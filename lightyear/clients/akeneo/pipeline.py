@@ -1,6 +1,7 @@
 """Akeneo pipeline class
 """
 
+import time
 from base64 import b64encode
 from datetime import datetime
 from urllib.parse import parse_qs, urlsplit
@@ -20,8 +21,6 @@ class Akeneo(Pipeline):
 
     def monitor_proc(self, queue_1, queue_2, queue_3):
         """Monitor process"""
-        import time
-
         logger = self.get_logger("monitor_proc")
         logger.info("Process started")
         while True:

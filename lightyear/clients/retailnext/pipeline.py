@@ -2,6 +2,7 @@
 """
 
 import json
+import time
 from datetime import datetime, timedelta
 
 import requests
@@ -18,8 +19,6 @@ class RetailNext(Pipeline):
 
     def monitor_proc(self, queue_1, queue_2):
         """Monitor process"""
-        import time
-
         logger = self.get_logger("monitor_proc")
         logger.info("Process started")
         while True:
