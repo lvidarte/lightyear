@@ -1,8 +1,12 @@
 """BigQuery module
 """
 
+from datetime import datetime
+
 import google.auth
 from google.cloud import bigquery
+
+from lightyear.core import config
 
 
 class BigQuery:
@@ -29,6 +33,9 @@ class BigQuery:
 
     def insert(self, docs):
         table = self.client.get_table(self.table_uri())
+        for doc in docs:
+            doc["metadata"]["insertion_time"] = datetime.now().strftime(config.time_format)
         errors = self.client.insert_rows(table, docs)  # Make an API request.
-        assert errors == [], str(errors)
+        if errors:
+            raise Exception(f"Insertion error - {errors}")
         return len(docs)
