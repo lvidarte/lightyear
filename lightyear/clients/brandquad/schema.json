@@ -141,6 +141,11 @@
                 "name": "ingestion_time",
                 "type": "TIMESTAMP",
                 "mode": "REQUIRED"
+            },
+            {
+                "name": "insertion_time",
+                "type": "TIMESTAMP",
+                "mode": "REQUIRED"
             }
         ]
     }
