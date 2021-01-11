@@ -17,6 +17,7 @@ class Akeneo(Pipeline):
     def __init__(self, config, args):
         super().__init__(config, args)
         self.account = config.accounts[args.account]
+        self.ingestion_time = datetime.now().strftime(common_config.time_format)
         self.bigquery = BigQuery(**config.gcp)
 
     def monitor_proc(self, queue_1, queue_2, queue_3):
@@ -115,13 +116,40 @@ class Akeneo(Pipeline):
             "account": self.account["name"],  # faces, tryano
             "enabled": doc["enabled"],
             "family": doc["family"],
+            "categories": ','.join(doc["categories"]) if doc["categories"] else None,
+            "groups": str(doc["groups"]),
+            "parent": doc["parent"],
+            "values": self._parse_values(doc["values"]),
             "created": doc["created"],
             "updated": doc["updated"],
             "metadata": {
-                "ingestion_time": datetime.now().strftime(common_config.time_format),
+                "ingestion_time": self.ingestion_time,  # common value for all docs
+                "insertion_time": None,  # it will set in bigquery insert action
             },
         }
         # fmt: on
+
+    def _parse_values(self, values_dict):
+        values = []
+        for name, values_lst in values_dict.items():
+            for item in values_lst:
+                # fmt: off
+                values.append({
+                    "name": name,
+                    "locale": item.get("locale"),
+                    "scope": item.get("scope"),
+                    "data": self._parse_data(item.get("data")),
+                })
+                # fmt: on
+        return values
+
+    def _parse_data(self, data_obj):
+        if data_obj is None:
+            return None
+        elif isinstance(data_obj, list):
+            return ",".join([str(s) for s in data_obj])
+        else:
+            return str(data_obj)
 
     def _auth(self):
         url = self.account["api_url"] + "/api/oauth/v1/token"

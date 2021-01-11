@@ -15,6 +15,7 @@ from lightyear.core.bigquery import BigQuery
 class RetailNext(Pipeline):
     def __init__(self, config, args):
         super().__init__(config, args)
+        self.ingestion_time = datetime.now().strftime(common_config.time_format)
         self.bigquery = BigQuery(**self.config.gcp)
 
     def monitor_proc(self, queue_1, queue_2):
@@ -114,7 +115,8 @@ class RetailNext(Pipeline):
             "location": location,
             "metrics": metrics["metrics"],
             "metadata": {
-                "ingestion_time": datetime.now().strftime(common_config.time_format),
+                "ingestion_time": self.ingestion_time,  # common value for all docs
+                "insertion_time": None,  # it will set in bigquery insert action
             },
         }
         # fmt: on
