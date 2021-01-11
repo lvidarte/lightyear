@@ -3,11 +3,12 @@
 
 import time
 from base64 import b64encode
+from datetime import datetime
 from urllib.parse import parse_qs, urlsplit
 
 import requests
 
-from lightyear.core import Pipeline
+from lightyear.core import Pipeline, config
 
 
 class Akeneo(Pipeline):
@@ -43,15 +44,16 @@ class Akeneo(Pipeline):
             for doc in docs:
                 queue_1.put(doc)
             count += len(docs)
-            logger.info(f"{count} docs sent to queue_1")
+            if count % self.config.logger_buffer == 0:
+                logger.info(f"{count} docs received from api")
             if next_params:
                 params = next_params
             else:
                 break
-        logger.info(f"Process finished ({count} docs processed)")
+        logger.info(f"Process finished ({count} docs received)")
 
     def doc_formatter_proc(self, queue_1, queue_2):
-        """Custom format"""
+        """Document format according to BigQuery schema"""
         logger = self.get_logger("doc_formatter_proc")
         logger.info("Process started")
         count = 0
@@ -62,8 +64,8 @@ class Akeneo(Pipeline):
             else:
                 count += 1
                 queue_2.put(self._format(doc))
-            if count % 100 == 0:
-                logger.info(f"{count} docs sent to queue_2")
+            if count % self.config.logger_buffer == 0:
+                logger.info(f"{count} docs processed")
         logger.info(f"Process finished ({count} docs processed)")
 
     def doc_validator_proc(self, queue_2, queue_3):
@@ -71,15 +73,21 @@ class Akeneo(Pipeline):
         logger = self.get_logger("doc_validator_proc")
         logger.info("Process started")
         count = 0
+        docs = []
         while True:
             doc = queue_2.get()
             if doc == "DONE":
+                if docs:
+                    self._validate_and_send(docs, queue_3)
                 break
             else:
+                docs.append(doc)
                 count += 1
-                queue_3.put(doc)  # Check here if doc already in bigquery
-            if count % 100 == 0:
-                logger.info(f"{count} docs sent to queue_3")
+                if count % self.config.bigquery_select_buffer == 0:
+                    self._validate_and_send(docs, queue_3)
+                    docs = []
+            if count % self.config.logger_buffer == 0:
+                logger.info(f"{count} docs proccessed")
         logger.info(f"Process finished ({count} docs processed)")
 
     def bigquery_proc(self, queue_3):
@@ -97,14 +105,14 @@ class Akeneo(Pipeline):
             else:
                 docs.append(doc)
                 count += 1
-                if count % 100 == 0:
+                if count % self.config.bigquery_insert_buffer == 0:
                     self.bigquery.insert(docs)
                     logger.info(f"{count} docs sent to bigquery")
                     docs = []
         logger.info(f"Process finished ({count} docs processed)")
 
     def _format(self, doc):
-        """Need to work on this..."""
+        """BigQuery document format"""
         # fmt: off
         return {
             "id": doc["identifier"],
@@ -115,8 +123,8 @@ class Akeneo(Pipeline):
             "groups": str(doc["groups"]),
             "parent": doc["parent"],
             "values": self._parse_values(doc["values"]),
-            "created": doc["created"],
-            "updated": doc["updated"],
+            "created": datetime.strptime(doc["created"], self.config.time_format).strftime(config.time_format),
+            "updated": datetime.strptime(doc["updated"], self.config.time_format).strftime(config.time_format),
             "metadata": {
                 "ingestion_time": self.ingestion_time,  # common value for all docs
                 "insertion_time": None,  # it will set in bigquery insert action
@@ -145,6 +153,24 @@ class Akeneo(Pipeline):
             return ",".join([str(s) for s in data_obj])
         else:
             return str(data_obj)
+
+    def _validate_and_send(self, docs, queue):
+        results = {d["id"]: {"updated": d["updated"], "insert": True} for d in docs}
+        query = """
+            SELECT id, updated
+            FROM `{}`
+            WHERE id IN ({})
+        """.format(
+            self.bigquery.table_uri(),
+            ",".join([f"\"{d['id']}\"" for d in docs]),
+        )
+        for row in self.bigquery.query(query):
+            row_updated = row.updated.strftime(config.time_format)
+            if results[row.id]["updated"] == row_updated:
+                results[row.id]["insert"] = False
+        for doc in docs:
+            if results[doc["id"]]["insert"]:
+                queue.put(doc)
 
     def _auth(self):
         url = self.account["api_url"] + "/api/oauth/v1/token"

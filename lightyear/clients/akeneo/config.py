@@ -12,6 +12,14 @@ class Config:
             "table_id": "akeneo",
         }
 
+        # Buffers
+        self.logger_buffer = 1000
+        self.bigquery_select_buffer = 100
+        self.bigquery_insert_buffer = 100
+
+        # Datetime format for created and updated fields
+        self.time_format = "%Y-%m-%dT%H:%M:%S%z"
+
         self.accounts = {
             "faces": {
                 "name": "faces",
