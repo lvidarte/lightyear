@@ -4,13 +4,14 @@
 import importlib
 import multiprocessing
 
+from lightyear.core.bigquery import BigQuery
 from lightyear.core.logger import get_logger
 
 
 def run(client_config, args):
     logger = get_logger()
     module = importlib.import_module(client_config.module_name)
-    client_obj = getattr(module, client_config.class_name)(client_config, args)
+    client_obj = getattr(module, client_config.class_name)(client_config, args, BigQuery)
     context = multiprocessing.get_context("fork")
     queues = {name: context.Queue() for name in client_config.queues}
     pools = []

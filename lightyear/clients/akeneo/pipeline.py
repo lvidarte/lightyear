@@ -3,22 +3,17 @@
 
 import time
 from base64 import b64encode
-from datetime import datetime
 from urllib.parse import parse_qs, urlsplit
 
 import requests
 
 from lightyear.core import Pipeline
-from lightyear.core import config as common_config
-from lightyear.core.bigquery import BigQuery
 
 
 class Akeneo(Pipeline):
-    def __init__(self, config, args):
-        super().__init__(config, args)
+    def __init__(self, config, args, bigquery_cls):
+        super().__init__(config, args, bigquery_cls)
         self.account = config.accounts[args.account]
-        self.ingestion_time = datetime.now().strftime(common_config.time_format)
-        self.bigquery = BigQuery(**config.gcp)
 
     def monitor_proc(self, queue_1, queue_2, queue_3):
         """Monitor process"""

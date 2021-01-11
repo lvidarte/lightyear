@@ -8,16 +8,9 @@ from datetime import datetime, timedelta
 import requests
 
 from lightyear.core import Pipeline
-from lightyear.core import config as common_config
-from lightyear.core.bigquery import BigQuery
 
 
 class RetailNext(Pipeline):
-    def __init__(self, config, args):
-        super().__init__(config, args)
-        self.ingestion_time = datetime.now().strftime(common_config.time_format)
-        self.bigquery = BigQuery(**self.config.gcp)
-
     def monitor_proc(self, queue_1, queue_2):
         """Monitor process"""
         logger = self.get_logger("monitor_proc")
