@@ -11,6 +11,10 @@ from lightyear.core import Pipeline
 
 
 class RetailNext(Pipeline):
+    def __init__(self, config, args, bigquery_cls):
+        super().__init__(config, args, bigquery_cls)
+        self.account = config.accounts[args.account]
+
     def monitor_proc(self, queue_1, queue_2):
         """Monitor process"""
         logger = self.get_logger("monitor_proc")
@@ -31,7 +35,7 @@ class RetailNext(Pipeline):
         logger = self.get_logger("api_client_location_proc")
         logger.info("Process started")
         session = self._session()
-        location_url = self.config.api["url"] + "/location"
+        location_url = self.account["api_url"] + "/location"
         page_start = "0"
         count = 0
         while True:
@@ -45,14 +49,14 @@ class RetailNext(Pipeline):
                 page_start = response.headers["X-Page-Next"]
             else:
                 break
-        logger.info(f"Process finished ({count} docs processed)")
+        logger.info(f"Process finished ({count} docs received)")
 
     def api_client_datamine_proc(self, queue_1, queue_2):
         """RetailNext API client datamine process"""
         logger = self.get_logger("api_client_datamine_proc")
         logger.info("Process started")
         session = self._session()
-        datamine_url = self.config.api["url"] + "/datamine"
+        datamine_url = self.account["api_url"] + "/datamine"
         date = self._last_day()
         first_day, last_day = self._date_ranges()
         count = 0
@@ -72,8 +76,8 @@ class RetailNext(Pipeline):
                 response = session.post(datamine_url, data=json.dumps(query))
                 queue_2.put(self._format(date, location, response.json()))
                 count += 1
-            if count % 100 == 0:
-                logger.info(f"{count} docs sent to queue_2")
+            if count % self.config.logger_buffer == 0:
+                logger.info(f"{count} docs processed")
         logger.info(f"Process finished ({count} docs processed)")
 
     def bigquery_proc(self, queue_2):
@@ -86,13 +90,13 @@ class RetailNext(Pipeline):
             doc = queue_2.get()
             if doc == "DONE":
                 if docs:
-                    self.bigquery.insert(docs)
+                    self.bigquery.insert(docs, logger)
                 break
             else:
                 docs.append(doc)
                 count += 1
-                if count % 100 == 0:
-                    self.bigquery.insert(docs)
+                if count % self.config.bigquery_insert_buffer == 0:
+                    self.bigquery.insert(docs, logger)
                     logger.info(f"{count} docs sent to bigquery")
                     docs = []
         logger.info(f"Process finished ({count} docs processed)")
@@ -105,6 +109,7 @@ class RetailNext(Pipeline):
         # fmt: off
         return {
             "date": date,
+            "account": self.account["name"],
             "location": location,
             "metrics": metrics["metrics"],
             "metadata": {
@@ -130,7 +135,7 @@ class RetailNext(Pipeline):
     def _session(self):
         session = requests.Session()
         session.auth = (
-            self.config.api["access_key"],
-            self.config.api["secret_key"],
+            self.account["access_key"],
+            self.account["secret_key"],
         )
         return session

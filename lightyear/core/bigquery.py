@@ -31,11 +31,10 @@ class BigQuery:
         query_job = self.client.query(query)
         return query_job.result()
 
-    def insert(self, docs):
+    def insert(self, docs, logger=None):
         table = self.client.get_table(self.table_uri())
         for doc in docs:
             doc["metadata"]["insertion_time"] = datetime.now().strftime(config.time_format)
         errors = self.client.insert_rows(table, docs)  # Make an API request.
-        if errors:
-            raise Exception(f"Insertion error - {errors}")
-        return len(docs)
+        if errors and logger:
+            logger.error(str(errors))

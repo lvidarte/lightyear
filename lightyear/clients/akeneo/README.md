@@ -40,22 +40,22 @@ Creating lightyear_lightyear_run ... done
 [ INFO ] 2021-01-05 14:15:40 | validator-10 (pid 26) | Process started
 [ INFO ] 2021-01-05 14:15:40 | bigquery-11 (pid 30) | Process started
 [ INFO ] 2021-01-05 14:15:40 | bigquery-12 (pid 31) | Process started
-[ INFO ] 2021-01-05 14:15:43 | api_client-2 (pid 12) | 100 docs sent to queue_1
-[ INFO ] 2021-01-05 14:15:44 | api_client-2 (pid 12) | 200 docs sent to queue_1
-[ INFO ] 2021-01-05 14:15:44 | validator-9 (pid 25) | 100 docs sent to queue_3
+[ INFO ] 2021-01-05 14:15:43 | api_client-2 (pid 12) | 100 docs received from api
+[ INFO ] 2021-01-05 14:15:44 | api_client-2 (pid 12) | 200 docs received from api
+[ INFO ] 2021-01-05 14:15:44 | validator-9 (pid 25) | 100 docs processed
 [ INFO ] 2021-01-05 14:15:44 | monitor-1 (pid 8) | Queue sizes: queue_1=47, queue_2=32, queue_3=5
 ...
 [ INFO ] 2021-01-05 14:32:58 | monitor-1 (pid 8) | Queue sizes: queue_1=55, queue_2=2, queue_3=5
-[ INFO ] 2021-01-05 14:32:58 | validator-10 (pid 26) | 18900 docs sent to queue_3
-[ INFO ] 2021-01-05 14:32:58 | formatter-5 (pid 18) | 19100 docs sent to queue_2
+[ INFO ] 2021-01-05 14:32:58 | validator-10 (pid 26) | 18900 docs processed
+[ INFO ] 2021-01-05 14:32:58 | formatter-5 (pid 18) | 19100 docs processed
 [ INFO ] 2021-01-05 14:32:59 | bigquery-11 (pid 30) | 38500 docs sent to bigquery
 [ INFO ] 2021-01-05 14:32:59 | bigquery-12 (pid 31) | 37900 docs sent to bigquery
-[ INFO ] 2021-01-05 14:33:01 | api_client-2 (pid 12) | 76500 docs sent to queue_1
-[ INFO ] 2021-01-05 14:33:01 | formatter-4 (pid 17) | 18900 docs sent to queue_2
-[ INFO ] 2021-01-05 14:33:01 | validator-8 (pid 24) | 19300 docs sent to queue_3
+[ INFO ] 2021-01-05 14:33:01 | api_client-2 (pid 12) | 76500 docs received from api
+[ INFO ] 2021-01-05 14:33:01 | formatter-4 (pid 17) | 18900 docs processed
+[ INFO ] 2021-01-05 14:33:01 | validator-8 (pid 24) | 19300 docs processed
 [ INFO ] 2021-01-05 14:33:01 | monitor-1 (pid 8) | Queue sizes: queue_1=61, queue_2=10, queue_3=24
-[ INFO ] 2021-01-05 14:33:02 | api_client-2 (pid 12) | 76526 docs sent to queue_1
-[ INFO ] 2021-01-05 14:33:02 | api_client-2 (pid 12) | Process finished (76526 docs processed)
+[ INFO ] 2021-01-05 14:33:02 | api_client-2 (pid 12) | 76526 docs received from api
+[ INFO ] 2021-01-05 14:33:02 | api_client-2 (pid 12) | Process finished (76526 docs received)
 [ INFO ] 2021-01-05 14:33:02 | main-0 (pid 1) | All api_client processes have finished
 [ INFO ] 2021-01-05 14:33:02 | formatter-3 (pid 16) | Process finished (19398 docs processed)
 [ INFO ] 2021-01-05 14:33:02 | formatter-5 (pid 18) | Process finished (19163 docs processed)

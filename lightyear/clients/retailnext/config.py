@@ -12,13 +12,29 @@ class Config:
             "table_id": "retailnext",
         }
 
-        self.api = {
-            "access_key": "722cae92-e991-11e9-9f8b-0000f94ce06d",
-            "secret_key": "qj1GV8pCygSAvZ2jocZAwli4Hqo",
-            "url": "https://swarovski-me.api.retailnext.net/v1",
+        # Buffers
+        self.logger_buffer = 1000
+        self.bigquery_select_buffer = 100
+        self.bigquery_insert_buffer = 100
+
+        self.accounts = {
+            "swarovski": {
+                "name": "swarovski",
+                "access_key": "722cae92-e991-11e9-9f8b-0000f94ce06d",
+                "secret_key": "qj1GV8pCygSAvZ2jocZAwli4Hqo",
+                "api_url": "https://swarovski-me.api.retailnext.net/v1",
+            },
         }
 
-        self.args = []
+        self.args = [
+            (
+                ("-a", "--account"),
+                {
+                    "help": "the retailnext account",
+                    "choices": ["swarovski"],
+                },
+            ),
+        ]
 
         self.queues = [
             "queue_1",

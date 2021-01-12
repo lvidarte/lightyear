@@ -87,7 +87,7 @@ class Akeneo(Pipeline):
                     self._validate_and_send(docs, queue_3)
                     docs = []
             if count % self.config.logger_buffer == 0:
-                logger.info(f"{count} docs proccessed")
+                logger.info(f"{count} docs processed")
         logger.info(f"Process finished ({count} docs processed)")
 
     def bigquery_proc(self, queue_3):
@@ -100,13 +100,13 @@ class Akeneo(Pipeline):
             doc = queue_3.get()
             if doc == "DONE":
                 if docs:
-                    self.bigquery.insert(docs)
+                    self.bigquery.insert(docs, logger)
                 break
             else:
                 docs.append(doc)
                 count += 1
                 if count % self.config.bigquery_insert_buffer == 0:
-                    self.bigquery.insert(docs)
+                    self.bigquery.insert(docs, logger)
                     logger.info(f"{count} docs sent to bigquery")
                     docs = []
         logger.info(f"Process finished ({count} docs processed)")

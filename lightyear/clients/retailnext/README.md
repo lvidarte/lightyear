@@ -13,13 +13,15 @@ $ python main.py retailnext --help
 usage: lightyear retailnext [-h]
 
 optional arguments:
-  -h, --help  show this help message and exit
+  -h, --help            show this help message and exit
+  -a {swarovski}, --account {swarovski}
+                        the retailnext account
 ```
 
 ### Docker Composer run
 
 ```sh
-$ docker-compose run lightyear python main.py retailnext
+$ docker-compose run lightyear python main.py retailnext --account=swarovski
 Creating lightyear_lightyear_run ... done
 [ INFO ] 2021-01-05 14:44:24 | main-0 (pid 1) | Starting 1 monitor process
 [ INFO ] 2021-01-05 14:44:24 | monitor-1 (pid 10) | Process started
@@ -60,13 +62,13 @@ Creating lightyear_lightyear_run ... done
 ```sh
 $ docker exec <container-id> /bin/bash -c 'ps fax'
   PID TTY      STAT   TIME COMMAND
-    1 ?        Ss     0:00 python main.py retailnext
-   10 ?        S      0:00 python main.py retailnext
-   14 ?        Sl     0:00 python main.py retailnext
-   18 ?        Sl     0:00 python main.py retailnext
-   19 ?        Sl     0:00 python main.py retailnext
-   20 ?        Sl     0:00 python main.py retailnext
-   21 ?        Sl     0:00 python main.py retailnext
-   25 ?        S      0:00 python main.py retailnext
-   26 ?        S      0:00 python main.py retailnext
+    1 ?        Ss     0:00 python main.py retailnext --account=swarovski
+   10 ?        S      0:00 python main.py retailnext --account=swarovski
+   14 ?        Sl     0:00 python main.py retailnext --account=swarovski
+   18 ?        Sl     0:00 python main.py retailnext --account=swarovski
+   19 ?        Sl     0:00 python main.py retailnext --account=swarovski
+   20 ?        Sl     0:00 python main.py retailnext --account=swarovski
+   21 ?        Sl     0:00 python main.py retailnext --account=swarovski
+   25 ?        S      0:00 python main.py retailnext --account=swarovski
+   26 ?        S      0:00 python main.py retailnext --account=swarovski
 ```

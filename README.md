@@ -12,12 +12,12 @@ Runs multiple parallel processes (fork) using queues as communication method.
 
 ```sh
 $ python main.py --help
-usage: lightyear [-h] [-l {error,warning,info,debug}] {akeneo,retailnext} ...
+usage: lightyear [-h] [-l {error,warning,info,debug}] {akeneo,brandquad,retailnext} ...
 
 Pipeline runner
 
 positional arguments:
-  {akeneo,retailnext}
+  {akeneo,brandquad,retailnext}
 
 optional arguments:
   -h, --help            show this help message and exit

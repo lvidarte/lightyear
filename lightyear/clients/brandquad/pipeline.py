@@ -60,7 +60,7 @@ class Brandquad(Pipeline):
                 count += 1
                 queue_2.put(self._format(doc))
             if count % self.config.logger_buffer == 0:
-                logger.info(f"{count} docs sent to queue_2")
+                logger.info(f"{count} docs processed")
         logger.info(f"Process finished ({count} docs processed)")
 
     def doc_validator_proc(self, queue_2, queue_3):
@@ -68,15 +68,21 @@ class Brandquad(Pipeline):
         logger = self.get_logger("doc_validator_proc")
         logger.info("Process started")
         count = 0
+        docs = []
         while True:
             doc = queue_2.get()
             if doc == "DONE":
+                if docs:
+                    self._validate_and_send(docs, queue_3)
                 break
             else:
+                docs.append(doc)
                 count += 1
-                queue_3.put(doc)  # Check here if doc already in bigquery
-            if count % 100 == 0:
-                logger.info(f"{count} docs sent to queue_3")
+                if count % self.config.bigquery_select_buffer == 0:
+                    self._validate_and_send(docs, queue_3)
+                    docs = []
+            if count % self.config.logger_buffer == 0:
+                logger.info(f"{count} docs processed")
         logger.info(f"Process finished ({count} docs processed)")
 
     def bigquery_proc(self, queue_3):
@@ -89,13 +95,13 @@ class Brandquad(Pipeline):
             doc = queue_3.get()
             if doc == "DONE":
                 if docs:
-                    self.bigquery.insert(docs)
+                    self.bigquery.insert(docs, logger)
                 break
             else:
                 docs.append(doc)
                 count += 1
                 if count % self.config.bigquery_insert_buffer == 0:
-                    self.bigquery.insert(docs)
+                    self.bigquery.insert(docs, logger)
                     logger.info(f"{count} docs sent to bigquery")
                     docs = []
         logger.info(f"Process finished ({count} docs processed)")
@@ -192,4 +198,27 @@ class Brandquad(Pipeline):
     def _parse_assets(self, assets):
         for item in assets:
             del item["dam"]["meta_info"]  # Always {}
+            if "size" not in item["dam"] or not item["dam"]["size"]:
+                item["dam"]["size"] = {
+                    "width": None,
+                    "height": None,
+                }
         return assets
+
+    def _validate_and_send(self, docs, queue):
+        results = {d["id"]: {"updated": d["timestamp"], "insert": True} for d in docs}
+        query = """
+            SELECT id, timestamp as updated
+            FROM `{}`
+            WHERE id IN ({})
+        """.format(
+            self.bigquery.table_uri(),
+            ",".join([f"\"{d['id']}\"" for d in docs]),
+        )
+        for row in self.bigquery.query(query):
+            row_updated = row.updated.strftime(config.time_format)
+            if results[row.id]["updated"] == row_updated:
+                results[row.id]["insert"] = False
+        for doc in docs:
+            if results[doc["id"]]["insert"]:
+                queue.put(doc)

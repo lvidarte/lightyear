@@ -5,6 +5,11 @@
         "mode": "REQUIRED"
     },
     {
+        "name": "account",
+        "type": "STRING",
+        "mode": "REQUIRED"
+    },
+    {
         "name": "location",
         "type": "RECORD",
         "mode": "REQUIRED",

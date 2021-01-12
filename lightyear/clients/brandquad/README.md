@@ -13,14 +13,15 @@ $ python main.py brandquad --help
 usage: lightyear brandquad [-h]
 
 optional arguments:
-  -h, --help  show this help message and exit
+  -h, --help            show this help message and exit
+  -a {level}, --account {level}
+                        the brandquad account
 ```
 
 ### Docker Composer run
 
 ```sh
-$ docker-compose run lightyear python main.py brandquad
-$ docker-compose run lightyear python main.py brandquad
+$ docker-compose run lightyear python main.py brandquad --account=level
 Creating lightyear_lightyear_run ... done
 [ INFO ] 2021-01-07 12:54:16 | main-0 (pid 1) | Starting 1 monitor process
 [ INFO ] 2021-01-07 12:54:16 | monitor-1 (pid 9) | Process started
@@ -39,7 +40,7 @@ Creating lightyear_lightyear_run ... done
 [ INFO ] 2021-01-07 12:54:16 | validator-10 (pid 27) | Process started
 [ INFO ] 2021-01-07 12:54:16 | bigquery-11 (pid 31) | Process started
 [ INFO ] 2021-01-07 12:54:16 | bigquery-12 (pid 32) | Process started
-[ INFO ] 2021-01-07 12:54:19 | api_client-2 (pid 13) | 50 docs sent to queue_1
+[ INFO ] 2021-01-07 12:54:19 | api_client-2 (pid 13) | 50 docs received from api
 ...
 
 ```
@@ -50,17 +51,17 @@ Creating lightyear_lightyear_run ... done
 $ docker exec <container-id> /bin/bash -c 'ps fax'
   PID TTY      STAT   TIME COMMAND
    45 ?        Rs     0:00 ps fax
-    1 pts/0    Ss+    0:00 python main.py brandquad
-    9 pts/0    S+     0:00 python main.py brandquad
-   13 pts/0    Sl+    0:01 python main.py brandquad
-   17 pts/0    Sl+    0:00 python main.py brandquad
-   18 pts/0    Sl+    0:00 python main.py brandquad
-   19 pts/0    Sl+    0:00 python main.py brandquad
-   20 pts/0    Sl+    0:00 python main.py brandquad
-   24 pts/0    Sl+    0:00 python main.py brandquad
-   25 pts/0    Sl+    0:00 python main.py brandquad
-   26 pts/0    Sl+    0:00 python main.py brandquad
-   27 pts/0    Sl+    0:00 python main.py brandquad
-   31 pts/0    S+     0:00 python main.py brandquad
-   32 pts/0    S+     0:00 python main.py brandquad
+    1 pts/0    Ss+    0:00 python main.py brandquad --account=level
+    9 pts/0    S+     0:00 python main.py brandquad --account=level
+   13 pts/0    Sl+    0:01 python main.py brandquad --account=level
+   17 pts/0    Sl+    0:00 python main.py brandquad --account=level
+   18 pts/0    Sl+    0:00 python main.py brandquad --account=level
+   19 pts/0    Sl+    0:00 python main.py brandquad --account=level
+   20 pts/0    Sl+    0:00 python main.py brandquad --account=level
+   24 pts/0    Sl+    0:00 python main.py brandquad --account=level
+   25 pts/0    Sl+    0:00 python main.py brandquad --account=level
+   26 pts/0    Sl+    0:00 python main.py brandquad --account=level
+   27 pts/0    Sl+    0:00 python main.py brandquad --account=level
+   31 pts/0    S+     0:00 python main.py brandquad --account=level
+   32 pts/0    S+     0:00 python main.py brandquad --account=level
 ```
