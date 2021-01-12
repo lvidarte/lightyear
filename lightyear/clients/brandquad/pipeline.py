@@ -2,13 +2,18 @@
 """
 
 import time
+from datetime import datetime
 
 import requests
 
-from lightyear.core import Pipeline
+from lightyear.core import Pipeline, config
 
 
 class Brandquad(Pipeline):
+    def __init__(self, config, args, bigquery_cls):
+        super().__init__(config, args, bigquery_cls)
+        self.account = config.accounts[args.account]
+
     def monitor_proc(self, queue_1, queue_2, queue_3):
         """Monitor process"""
         logger = self.get_logger("monitor_proc")
@@ -29,20 +34,21 @@ class Brandquad(Pipeline):
         """Brandquad API client process"""
         logger = self.get_logger("api_client_proc")
         logger.info("Process started")
-        next_url = self.config.api["url"]
+        next_url = self.account["api_url"]
         count = 0
         while True:
             docs, next_url = self._products(next_url)
             for doc in docs:
                 queue_1.put(doc)
             count += len(docs)
-            logger.info(f"{count} docs sent to queue_1")
+            if count % self.config.logger_buffer == 0:
+                logger.info(f"{count} docs received from api")
             if not next_url:
                 break
-        logger.info(f"Process finished ({count} docs processed)")
+        logger.info(f"Process finished ({count} docs received)")
 
     def doc_formatter_proc(self, queue_1, queue_2):
-        """Custom format"""
+        """Document format according to BigQuery schema"""
         logger = self.get_logger("doc_formatter_proc")
         logger.info("Process started")
         count = 0
@@ -53,7 +59,7 @@ class Brandquad(Pipeline):
             else:
                 count += 1
                 queue_2.put(self._format(doc))
-            if count % 100 == 0:
+            if count % self.config.logger_buffer == 0:
                 logger.info(f"{count} docs sent to queue_2")
         logger.info(f"Process finished ({count} docs processed)")
 
@@ -82,14 +88,14 @@ class Brandquad(Pipeline):
         while True:
             doc = queue_3.get()
             if doc == "DONE":
-                # if docs:
-                #    self.bigquery.insert(docs)
+                if docs:
+                    self.bigquery.insert(docs)
                 break
             else:
                 docs.append(doc)
                 count += 1
-                if count % 100 == 0:
-                    # self.bigquery.insert(docs)
+                if count % self.config.bigquery_insert_buffer == 0:
+                    self.bigquery.insert(docs)
                     logger.info(f"{count} docs sent to bigquery")
                     docs = []
         logger.info(f"Process finished ({count} docs processed)")
@@ -97,8 +103,8 @@ class Brandquad(Pipeline):
     def _products(self, url):
         headers = {
             "Content-Type": "application/json",
-            "TOKEN": self.config.api["token"],
-            "APPID": self.config.api["appid"],
+            "TOKEN": self.account["token"],
+            "APPID": self.account["appid"],
         }
         res = requests.get(url, headers=headers)
         if res.status_code == 200:
@@ -107,14 +113,83 @@ class Brandquad(Pipeline):
         else:
             raise Exception(f"{res.status_code} {res.text}")
 
-    def _format(self, product):
+    def _format(self, doc):
         """BigQuery document format"""
         # fmt: off
+        meta = doc["meta"]
         return {
-            "product": product,
+            "id": meta["id"],
+            "account": self.account["name"],
+            "name": meta.get("name"),
+            "version": meta.get("version"),
+            "type": meta.get("type"),
+            "abstract_level": meta.get("abstract_level"),
+            "infomodel": meta.get("infomodel"),
+            "product_model": meta["product_model"] if isinstance(meta.get("product_model"), str) else None,
+            "parent_product": meta.get("parent_product"),
+            "cover": meta["cover"] if isinstance(meta.get("cover"), str) else None,
+            "timestamp": datetime.fromtimestamp(meta["timestamp"]).strftime(config.time_format),
+            "status": meta.get("status"),
+            "taxonomy": meta.get("taxonomy"),
+            "progress": meta.get("progress", []),
+
+            "attributes": self._parse_attributes(doc["attributes"]),
+            "assets": self._parse_assets(doc["assets"]),
+            "categories": doc["categories"],
+            # "relations": doc["relations"],  # not info
+            # "sets": doc["sets"],  # not info
+
             "metadata": {
                 "ingestion_time": self.ingestion_time,  # common value for all docs
                 "insertion_time": None,  # it will set in bigquery insert action
             },
         }
         # fmt: on
+
+    def _parse_attributes(self, doc):
+        attributes = []
+        for name, attr in doc.items():
+            if attr:
+                attribute = {
+                    "name": name,
+                    "items": [],
+                }
+                if isinstance(attr, list):
+                    for item in attr:
+                        if isinstance(item, dict):
+                            attribute["items"].append(
+                                {
+                                    "name": item.get("name"),
+                                    "locale": item.get("locale"),
+                                    "value": self._parse_value(item.get("value", [])),
+                                }
+                            )
+                        else:
+                            attribute["items"].append(
+                                {
+                                    "name": None,
+                                    "locale": None,
+                                    "value": str(item),
+                                }
+                            )
+                else:
+                    attribute["items"].append(
+                        {
+                            "name": None,
+                            "locale": None,
+                            "value": str(attr),
+                        }
+                    )
+                attributes.append(attribute)
+        return attributes
+
+    def _parse_value(self, value):
+        if isinstance(value, list):
+            return ",".join([str(o) for o in value])
+        else:
+            return str(value)
+
+    def _parse_assets(self, assets):
+        for item in assets:
+            del item["dam"]["meta_info"]  # Always {}
+        return assets

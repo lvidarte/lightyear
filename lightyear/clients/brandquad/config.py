@@ -12,13 +12,29 @@ class Config:
             "table_id": "brandquad",
         }
 
-        self.api = {
-            "appid": "LVL",
-            "token": "H25VR4CESVTVJCXQKM3L",
-            "url": "https://level.brandquad.io/api/public/v3/products/",
+        # Buffers
+        self.logger_buffer = 1000
+        self.bigquery_select_buffer = 100
+        self.bigquery_insert_buffer = 100
+
+        self.accounts = {
+            "level": {
+                "name": "level",
+                "appid": "LVL",
+                "token": "H25VR4CESVTVJCXQKM3L",
+                "api_url": "https://level.brandquad.io/api/public/v3/products/",
+            },
         }
 
-        self.args = []
+        self.args = [
+            (
+                ("-a", "--account"),
+                {
+                    "help": "the brandquad account",
+                    "choices": ["level"],
+                },
+            ),
+        ]
 
         self.queues = [
             "queue_1",
