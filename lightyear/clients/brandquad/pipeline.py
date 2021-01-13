@@ -126,7 +126,7 @@ class Brandquad(Pipeline):
         return {
             "id": meta["id"],
             "account": self.account["name"],
-            "updated": datetime.fromtimestamp(meta["timestamp"]).strftime(config.time_format),
+            "updated": datetime.utcfromtimestamp(meta["timestamp"]).strftime(config.time_format),
             "name": meta.get("name"),
             "version": meta.get("version"),
             "type": meta.get("type"),
