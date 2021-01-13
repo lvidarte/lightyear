@@ -26,12 +26,12 @@ Creating lightyear_lightyear_run ... done
 [ INFO ] 2021-01-05 14:44:24 | main-0 (pid 1) | Starting 1 monitor process
 [ INFO ] 2021-01-05 14:44:24 | monitor-1 (pid 10) | Process started
 [ INFO ] 2021-01-05 14:44:24 | main-0 (pid 1) | Starting 1 api_client_location process
-[ INFO ] 2021-01-05 14:44:24 | main-0 (pid 1) | Starting 4 api_client_datamine process
+[ INFO ] 2021-01-05 14:44:24 | main-0 (pid 1) | Starting 4 api_client_datamine processes
 [ INFO ] 2021-01-05 14:44:24 | api_client_datamine-3 (pid 18) | Process started
 [ INFO ] 2021-01-05 14:44:24 | api_client_location-2 (pid 14) | Process started
 [ INFO ] 2021-01-05 14:44:24 | api_client_datamine-4 (pid 19) | Process started
 [ INFO ] 2021-01-05 14:44:24 | api_client_datamine-5 (pid 20) | Process started
-[ INFO ] 2021-01-05 14:44:24 | main-0 (pid 1) | Starting 2 bigquery process
+[ INFO ] 2021-01-05 14:44:24 | main-0 (pid 1) | Starting 2 bigquery processes
 [ INFO ] 2021-01-05 14:44:24 | api_client_datamine-6 (pid 21) | Process started
 [ INFO ] 2021-01-05 14:44:24 | bigquery-7 (pid 25) | Process started
 [ INFO ] 2021-01-05 14:44:24 | bigquery-8 (pid 26) | Process started

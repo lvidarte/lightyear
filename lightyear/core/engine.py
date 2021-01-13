@@ -18,7 +18,8 @@ def run(client_config, args):
 
     for process in client_config.pipeline:
         if process["enabled"]:
-            logger.info(f"Starting {process['instances']} {process['name']} process")
+            process_noun = "process" if process["instances"] == 1 else "processes"
+            logger.info(f"Starting {process['instances']} {process['name']} {process_noun}")
             params = tuple(queues[name] for name in process["queues"])
             # fmt: off
             pool = context.Pool(

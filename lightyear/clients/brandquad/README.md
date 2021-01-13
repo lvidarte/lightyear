@@ -49,16 +49,16 @@ Creating lightyear_lightyear_run ... done
 [ INFO ] 2021-01-07 12:54:16 | monitor-1 (pid 9) | Process started
 [ INFO ] 2021-01-07 12:54:16 | main-0 (pid 1) | Starting 1 api_client process
 [ INFO ] 2021-01-07 12:54:16 | api_client-2 (pid 13) | Process started
-[ INFO ] 2021-01-07 12:54:16 | main-0 (pid 1) | Starting 4 formatter process
+[ INFO ] 2021-01-07 12:54:16 | main-0 (pid 1) | Starting 4 formatter processes
 [ INFO ] 2021-01-07 12:54:16 | formatter-3 (pid 17) | Process started
 [ INFO ] 2021-01-07 12:54:16 | formatter-4 (pid 18) | Process started
 [ INFO ] 2021-01-07 12:54:16 | formatter-6 (pid 20) | Process started
-[ INFO ] 2021-01-07 12:54:16 | main-0 (pid 1) | Starting 4 validator process
+[ INFO ] 2021-01-07 12:54:16 | main-0 (pid 1) | Starting 4 validator processes
 [ INFO ] 2021-01-07 12:54:16 | formatter-5 (pid 19) | Process started
 [ INFO ] 2021-01-07 12:54:16 | validator-7 (pid 24) | Process started
 [ INFO ] 2021-01-07 12:54:16 | validator-8 (pid 25) | Process started
 [ INFO ] 2021-01-07 12:54:16 | validator-9 (pid 26) | Process started
-[ INFO ] 2021-01-07 12:54:16 | main-0 (pid 1) | Starting 2 bigquery process
+[ INFO ] 2021-01-07 12:54:16 | main-0 (pid 1) | Starting 2 bigquery processes
 [ INFO ] 2021-01-07 12:54:16 | validator-10 (pid 27) | Process started
 [ INFO ] 2021-01-07 12:54:16 | bigquery-11 (pid 31) | Process started
 [ INFO ] 2021-01-07 12:54:16 | bigquery-12 (pid 32) | Process started
