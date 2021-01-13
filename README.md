@@ -4,6 +4,8 @@ Run N multiple parallel processes ([fork](https://en.wikipedia.org/wiki/Fork_(sy
 
 Lightyear is flexible: you can create N kinds of different processes, launch N instances for each of them, and create N queues for communication.
 
+Lightyear allows you to add specific command line options for every pipeline.
+
 
 ### Pipelines
 
