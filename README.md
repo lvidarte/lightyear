@@ -1,6 +1,9 @@
 # Lightyear - Pipeline runner
 
-Runs multiple parallel processes (fork) using queues as communication method.
+Run N multiple parallel processes ([fork](https://en.wikipedia.org/wiki/Fork_(system_call))) using queues as communication method.
+
+Lightyear is flexible: you can create N kinds of different processes, launch N instances for each of them, and create N queues for communication.
+
 
 ### Pipelines
 
