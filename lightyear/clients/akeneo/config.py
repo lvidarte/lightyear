@@ -72,6 +72,7 @@ class Config:
         self.pipeline = [
             {
                 "name": "monitor",
+                "enabled": False,
                 "function": "monitor_proc",
                 "queues": [
                     "queue_1",
@@ -84,6 +85,7 @@ class Config:
             },
             {
                 "name": "api_client",
+                "enabled": True,
                 "function": "api_client_proc",
                 "queues": [
                     "queue_1",
@@ -100,6 +102,7 @@ class Config:
             },
             {
                 "name": "formatter",
+                "enabled": True,
                 "function": "doc_formatter_proc",
                 "queues": [
                     "queue_1",
@@ -117,6 +120,7 @@ class Config:
             },
             {
                 "name": "validator",
+                "enabled": True,
                 "function": "doc_validator_proc",
                 "queues": [
                     "queue_2",
@@ -134,6 +138,7 @@ class Config:
             },
             {
                 "name": "bigquery",
+                "enabled": True,
                 "function": "bigquery_proc",
                 "queues": [
                     "queue_3",
