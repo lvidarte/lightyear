@@ -126,6 +126,7 @@ class Brandquad(Pipeline):
         return {
             "id": meta["id"],
             "account": self.account["name"],
+            "updated": datetime.fromtimestamp(meta["timestamp"]).strftime(config.time_format),
             "name": meta.get("name"),
             "version": meta.get("version"),
             "type": meta.get("type"),
@@ -134,7 +135,6 @@ class Brandquad(Pipeline):
             "product_model": meta["product_model"] if isinstance(meta.get("product_model"), str) else None,
             "parent_product": meta.get("parent_product"),
             "cover": meta["cover"] if isinstance(meta.get("cover"), str) else None,
-            "timestamp": datetime.fromtimestamp(meta["timestamp"]).strftime(config.time_format),
             "status": meta.get("status"),
             "taxonomy": meta.get("taxonomy"),
             "progress": meta.get("progress", []),
@@ -206,9 +206,9 @@ class Brandquad(Pipeline):
         return assets
 
     def _validate_and_send(self, docs, queue):
-        results = {d["id"]: {"updated": d["timestamp"], "insert": True} for d in docs}
+        results = {d["id"]: {"updated": d["updated"], "insert": True} for d in docs}
         query = """
-            SELECT id, timestamp as updated
+            SELECT id, updated
             FROM `{}`
             WHERE id IN ({})
         """.format(
