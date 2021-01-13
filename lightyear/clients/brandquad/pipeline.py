@@ -224,8 +224,6 @@ class Brandquad(Pipeline):
             row_updated = row.updated.strftime(config.time_format)
             if results[row.id]["updated"] == row_updated:
                 results[row.id]["insert"] = False
-            else:
-                print("DIFF", results[row.id]["updated"], row_updated)
         for doc in docs:
             if results[doc["id"]]["insert"]:
                 queue.put(doc)
