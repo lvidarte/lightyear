@@ -209,16 +209,23 @@ class Brandquad(Pipeline):
         results = {d["id"]: {"updated": d["updated"], "insert": True} for d in docs}
         query = """
             SELECT id, updated
-            FROM `{}`
-            WHERE id IN ({})
+            FROM (
+                SELECT id, updated, RANK() OVER(PARTITION BY id ORDER BY updated DESC) rank
+                FROM `{}`
+                WHERE account="{}" AND id IN ({})
+            )
+            WHERE rank=1
         """.format(
             self.bigquery.table_uri(),
+            self.account["name"],
             ",".join([f"\"{d['id']}\"" for d in docs]),
         )
         for row in self.bigquery.query(query):
             row_updated = row.updated.strftime(config.time_format)
             if results[row.id]["updated"] == row_updated:
                 results[row.id]["insert"] = False
+            else:
+                print("DIFF", results[row.id]["updated"], row_updated)
         for doc in docs:
             if results[doc["id"]]["insert"]:
                 queue.put(doc)

@@ -6,6 +6,18 @@
 
 - `chb-prod-ingest-ecom.lightyear.brandquad`
 
+Example: Get latest version of every product (Level Shoes)
+
+```sql
+SELECT *
+FROM (
+   SELECT *, RANK() OVER(PARTITION BY id ORDER BY updated DESC) rank
+   FROM `chb-prod-ingest-ecom.lightyear.brandquad`
+   WHERE account="level"
+)
+WHERE rank=1
+```
+
 ### Command line options for brandquad
 
 ```sh

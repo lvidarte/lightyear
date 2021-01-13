@@ -158,10 +158,15 @@ class Akeneo(Pipeline):
         results = {d["id"]: {"updated": d["updated"], "insert": True} for d in docs}
         query = """
             SELECT id, updated
-            FROM `{}`
-            WHERE id IN ({})
+            FROM (
+                SELECT id, updated, RANK() OVER(PARTITION BY id ORDER BY updated DESC) rank
+                FROM `{}`
+                WHERE account="{}" AND id IN ({})
+            )
+            WHERE rank=1
         """.format(
             self.bigquery.table_uri(),
+            self.account["name"],
             ",".join([f"\"{d['id']}\"" for d in docs]),
         )
         for row in self.bigquery.query(query):
