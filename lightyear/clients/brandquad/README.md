@@ -9,7 +9,7 @@
 Example: Get latest version of every product (Level Shoes)
 
 ```sql
-SELECT *
+SELECT * EXCEPT(rank)
 FROM (
    SELECT *, RANK() OVER(PARTITION BY id ORDER BY updated DESC) rank
    FROM `chb-prod-ingest-ecom.lightyear.brandquad`
