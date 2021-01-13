@@ -18,6 +18,16 @@ FROM (
 WHERE rank=1
 ```
 
+Example: Get total updates by day (Faces)
+
+```sql
+SELECT account, DATE(metadata.ingestion_time) AS date, COUNT(*) as total
+FROM `chb-prod-ingest-ecom.lightyear.akeneo`
+WHERE account="faces"
+GROUP BY account, date
+ORDER BY date DESC
+```
+
 ### Command line options for Akeneo
 
 ```sh

@@ -18,6 +18,16 @@ FROM (
 WHERE rank=1
 ```
 
+Example: Get total updates by day (Level Shoes)
+
+```sql
+SELECT account, DATE(metadata.ingestion_time) AS date, COUNT(*) as total
+FROM `chb-prod-ingest-ecom.lightyear.brandquad`
+WHERE account="level"
+GROUP BY account, date
+ORDER BY date DESC
+```
+
 ### Command line options for brandquad
 
 ```sh
