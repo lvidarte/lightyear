@@ -25,7 +25,7 @@ class RetailNext(Pipeline):
                 queue_2_size = queue_2.qsize()
                 if queue_1_size or queue_2_size:
                     logger.info(f"Queue sizes: queue_1={queue_1_size}, queue_2={queue_2_size}")
-                time.sleep(0.1)
+                time.sleep(self.config.monitor_freq)
             except NotImplementedError:
                 logger.error("Unable to show queue size (running macos?)")
                 break

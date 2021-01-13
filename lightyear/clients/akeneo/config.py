@@ -17,6 +17,9 @@ class Config:
         self.bigquery_select_buffer = 100
         self.bigquery_insert_buffer = 100
 
+        # Check queues every N seconds (mostly for debugging)
+        self.monitor_freq = 0.1
+
         # Datetime format for created and updated fields
         self.time_format = "%Y-%m-%dT%H:%M:%S%z"
 
