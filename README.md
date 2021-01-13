@@ -12,7 +12,7 @@ Runs multiple parallel processes (fork) using queues as communication method.
 
 ```sh
 $ python main.py --help
-usage: lightyear [-h] [-l {error,warning,info,debug}] {akeneo,brandquad,retailnext} ...
+usage: lightyear [-h] [-l {error,warning,info,debug}] [-d] {akeneo,brandquad,retailnext} ...
 
 Pipeline runner
 
@@ -23,6 +23,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -l {error,warning,info,debug}, --log-level {error,warning,info,debug}
                         set the logging level (default: info)
+  -d, --dummy           avoid bigquery insertion
 ```
 
 ## Development

@@ -13,6 +13,7 @@ class Pipeline:
         self.config = config
         self.args = args
         self.bigquery = bigquery_cls(**config.gcp)
+        self.bigquery.dummy(args.dummy)
         self.ingestion_time = datetime.now().strftime(common_config.time_format)
 
     def get_logger(self, fn_name):

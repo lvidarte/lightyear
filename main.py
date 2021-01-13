@@ -19,6 +19,14 @@ if __name__ == "__main__":
         default="info",
     )
 
+    parser.add_argument(
+        "-d",
+        "--dummy",
+        help="avoid bigquery insertion",
+        action="store_true",
+        default=False,
+    )
+
     client_parsers = {}
     for client_name, client_config in config.clients.items():
         client_parsers[client_name] = subparsers.add_parser(client_name)
