@@ -1,5 +1,6 @@
 """Brandquad Config class
 """
+import os
 
 
 class Config:
@@ -24,7 +25,7 @@ class Config:
             "level": {
                 "name": "level",
                 "appid": "LVL",
-                "token": "H25VR4CESVTVJCXQKM3L",
+                "token": os.environ.get('BRANDQUAD_LEVEL_TOKEN'),
                 "api_url": "https://level.brandquad.io/api/public/v3/products/",
             },
         }
