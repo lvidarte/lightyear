@@ -1,5 +1,6 @@
 """RetailNext Config class
 """
+import os
 
 
 class Config:
@@ -23,8 +24,8 @@ class Config:
         self.accounts = {
             "swarovski": {
                 "name": "swarovski",
-                "access_key": "722cae92-e991-11e9-9f8b-0000f94ce06d",
-                "secret_key": "qj1GV8pCygSAvZ2jocZAwli4Hqo",
+                "access_key": os.environ.get('RETAILNEXT_SWAROVSKI_ACCESS_KEY'),
+                "secret_key": os.environ.get('RETAILNEXT_SWAROVSKI_SECRET_KEY'),
                 "api_url": "https://swarovski-me.api.retailnext.net/v1",
             },
         }

@@ -1,5 +1,6 @@
 """Akeneo Config class
 """
+import os
 
 
 class Config:
@@ -27,25 +28,25 @@ class Config:
             "faces": {
                 "name": "faces",
                 "api_url": "https://chalhoub.cloud.akeneo.com",
-                "client_id": "4_3vrqtwj2zlc0oo8gok4wccccs8okso8c00woko4w0ocgkwww84",
-                "secret": "2vsfqhorxam8kcw0kk4ws4s0s4g448s48coc8okow8k44ggc4s",
+                "client_id": os.environ.get('AKENEO_FACES_CLIENT_ID'),
+                "secret": os.environ.get('AKENEO_FACES_SECRET'),
                 "max_items_per_request": 100,
                 "credentials": {
                     "grant_type": "password",
-                    "username": "catalogapi_8178",
-                    "password": "a929756f2",
+                    "username": os.environ.get('AKENEO_FACES_CREDENTIALS_USERNAME'),
+                    "password": os.environ.get('AKENEO_FACES_CREDENTIALS_PASSWORD'),
                 },
             },
             "tryano": {
                 "name": "tryano",
                 "api_url": "https://tryano.cloud.akeneo.com",
-                "client_id": "4_2kv5pfy9c4g0sc08k4g8o8c4ggosso8ccg8sgks4gcg4sgkoo0",
-                "secret": "3e87s6dxl8qos80k4sgw0gcsokcocgcowc8kw0kggckwc8sw00",
+                "client_id": os.environ.get('AKENEO_TRYANO_CLIENT_ID'),
+                "secret": os.environ.get('AKENEO_TRYANO_SECRET'),
                 "max_items_per_request": 100,
                 "credentials": {
                     "grant_type": "password",
-                    "username": "datateam_integration_1696",
-                    "password": "34fb25c6b",
+                    "username": os.environ.get('AKENEO_TRYANO_CREDENTIALS_USERNAME'),
+                    "password": os.environ.get('AKENEO_TRYANO_CREDENTIALS_PASSWORD'),
                 },
             },
         }
